@@ -57,6 +57,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           children: [
                             // image placeholder preview
                             SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.9,
                               child: Center(
                                 child: storyProvider.imagePath == null
                                     ? const Icon(Icons.image, size: 100.0)
@@ -106,7 +107,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                       labelText: 'Content',
                                       border: OutlineInputBorder(),
                                     ),
-                                    maxLines: 10,
+                                    maxLines: 5,
                                   ),
                                   const SizedBox(height: 20.0),
                                   // the submit button
@@ -149,6 +150,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                       children: [
                         // image placeholder preview
                         SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.3,
                           child: Center(
                             child: storyProvider.imagePath == null
                                 ? const Icon(Icons.image, size: 100.0)
@@ -198,7 +200,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                   labelText: 'Content',
                                   border: OutlineInputBorder(),
                                 ),
-                                maxLines: 10,
+                                maxLines: 5,
                               ),
                               const SizedBox(height: 20.0),
                               // the submit button
