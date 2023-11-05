@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:story_app/api/api_service.dart';
 import 'package:story_app/database/db.dart';
 import 'package:story_app/main.dart';
@@ -10,12 +14,16 @@ class StoryProvider extends ChangeNotifier {
   final DatabaseRepository _databaseRepository = DatabaseRepository();
 
   List<Story> _stories = [];
-  bool _isFetching = false;
   late DetailStory _detailStory;
+  XFile? _image;
+  String? _imagePath;
+  bool _isFetching = false;
 
   List<Story> get stories => _stories;
-  bool get isFetching => _isFetching;
   DetailStory get detailStory => _detailStory;
+  XFile? get image => _image;
+  String? get imagePath => _imagePath;
+  bool get isFetching => _isFetching;
 
   StoryProvider() {
     getAllStories();
@@ -35,6 +43,16 @@ class StoryProvider extends ChangeNotifier {
         createdAt: DateTime.now(),
         lat: 0,
         lon: 0);
+    notifyListeners();
+  }
+
+  void setImage(XFile value) {
+    _image = value;
+    notifyListeners();
+  }
+
+  void setImagePath(String value) {
+    _imagePath = value;
     notifyListeners();
   }
 
@@ -79,6 +97,59 @@ class StoryProvider extends ChangeNotifier {
     } finally {
       setIsFetching(false);
       notifyListeners();
+    }
+  }
+
+  void showImage() async {
+    return kIsWeb
+        ? showMyDialog(
+            'Error',
+            'This feature is not available on $defaultTargetPlatform',
+          )
+        : await showDialog(
+            context: navigatorKey.currentContext!,
+            builder: (context) {
+              return AlertDialog(
+                content: Image.file(
+                  File(
+                    imagePath.toString(),
+                  ),
+                ),
+              );
+            },
+          );
+  }
+
+  void onGalleryView() async {
+    final isMacOS = defaultTargetPlatform == TargetPlatform.macOS;
+    final isLinux = defaultTargetPlatform == TargetPlatform.linux;
+    if (isMacOS || isLinux) {
+      // throw alert error
+      showMyDialog(
+        'Error',
+        'This feature is not available on $defaultTargetPlatform',
+      );
+      return;
+    }
+
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+      );
+      notifyListeners();
+
+      if (pickedFile != null) {
+        setImage(pickedFile);
+        setImagePath(pickedFile.path);
+        notifyListeners();
+      }
+    } catch (e) {
+      // throw alert error
+      showMyDialog(
+        'Error',
+        e.toString(),
+      );
     }
   }
 }
