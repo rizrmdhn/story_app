@@ -7,11 +7,13 @@ import 'package:story_app/provider/story_provider.dart';
 class StoryScreen extends StatelessWidget {
   final Function logoutButtonOnPressed;
   final Function onTapped;
+  final Function onAddStoryButtonPressed;
 
   const StoryScreen({
     Key? key,
     required this.logoutButtonOnPressed,
     required this.onTapped,
+    required this.onAddStoryButtonPressed,
   }) : super(key: key);
 
   static const String routeName = '/story';
@@ -43,6 +45,16 @@ class StoryScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              onAddStoryButtonPressed();
+            },
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 30,
+            ), // Icon
           ),
         );
       },

@@ -3,6 +3,7 @@ import 'package:story_app/database/db.dart';
 import 'package:story_app/main.dart';
 import 'package:story_app/model/page_configuration.dart';
 import 'package:story_app/provider/auth_provider.dart';
+import 'package:story_app/screens/add_story_screen.dart';
 import 'package:story_app/screens/detail_story_screen.dart';
 import 'package:story_app/screens/login_screen.dart';
 import 'package:story_app/screens/register_screen.dart';
@@ -32,6 +33,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
 
   bool? isUnknown;
   bool? isLoggedIn;
+  bool? addStory;
   bool isRegister = false;
   String? selectedStoryId;
 
@@ -59,6 +61,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
 
         selectedStoryId = null;
         isRegister = false;
+        addStory = false;
         notifyListeners();
 
         return true;
@@ -78,6 +81,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
       return PageConfiguration.unknown();
     } else if (isLoggedIn == true) {
       return PageConfiguration.story();
+    } else if (addStory == true) {
+      return PageConfiguration.addStory();
     } else if (selectedStoryId != null) {
       return PageConfiguration.storyDetail(selectedStoryId!);
     } else {
@@ -102,6 +107,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     } else if (configuration.isAddStoryPage) {
       isRegister = false;
       isLoggedIn = true;
+      addStory = true;
     } else if (configuration.isStoryDetailPage) {
       isRegister = false;
       isUnknown = false;
@@ -181,6 +187,10 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
               selectedStoryId = id;
               notifyListeners();
             },
+            onAddStoryButtonPressed: () {
+              addStory = true;
+              notifyListeners();
+            },
           ),
         ),
         if (selectedStoryId != null)
@@ -189,6 +199,11 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             child: DetailStoryScreen(
               storyId: selectedStoryId!,
             ),
+          ),
+        if (addStory == true)
+          const MaterialPage(
+            key: ValueKey('AddStoryPage'),
+            child: AddStoryScreen(),
           ),
       ];
 }

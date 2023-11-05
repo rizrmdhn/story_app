@@ -37,7 +37,7 @@ class PageConfiguration {
       : unknown = false,
         loggedIn = true,
         isRegister = false,
-        addStory = false,
+        addStory = true,
         storyId = null;
 
   PageConfiguration.storyDetail(String id)
