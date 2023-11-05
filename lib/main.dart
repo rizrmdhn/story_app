@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app/database/db.dart';
 import 'package:story_app/provider/auth_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
-import 'package:story_app/screens/login_screen.dart';
-import 'package:story_app/screens/story_screen.dart';
+import 'package:story_app/routes/route_information_parser.dart';
+import 'package:story_app/routes/router_delegate.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
-void main() {
+main() async {
   runApp(
     MultiProvider(
       providers: [
@@ -22,35 +23,39 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late MyRouteInformationParser myRouteInformationParser;
+  late MyRouteDelegate _routeDelegate;
+
+  @override
+  void initState() {
+    final database = DatabaseRepository();
+    super.initState();
+    _routeDelegate = MyRouteDelegate(database);
+
+    myRouteInformationParser = MyRouteInformationParser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Story App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
       navigatorKey: navigatorKey,
-      home: const LoginScreen(),
+      home: Router(
+        routerDelegate: _routeDelegate,
+        routeInformationParser: myRouteInformationParser,
+        backButtonDispatcher: RootBackButtonDispatcher(),
+      ),
     );
   }
 }

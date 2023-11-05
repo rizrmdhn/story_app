@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/api/api_service.dart';
+import 'package:story_app/database/db.dart';
 import 'package:story_app/main.dart';
 import 'package:story_app/model/detail_story.dart';
 import 'package:story_app/model/story.dart';
 
 class StoryProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
+  final DatabaseRepository _databaseRepository = DatabaseRepository();
 
   List<Story> _stories = [];
   bool _isFetching = false;
@@ -27,7 +29,8 @@ class StoryProvider extends ChangeNotifier {
   Future<List<Story>> getAllStories() async {
     try {
       setIsFetching(true);
-      final response = await _apiService.getAllStories();
+      final userToken = await _databaseRepository.getUserToken();
+      final response = await _apiService.getAllStories(userToken);
       notifyListeners();
       return _stories = response.listStory;
     } catch (e) {

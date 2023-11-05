@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  final Function() onLogin;
+  final Function(String name, String email, String password) onRegister;
+
+  const RegisterScreen({
+    Key? key,
+    required this.onLogin,
+    required this.onRegister,
+  }) : super(key: key);
 
   static const String routeName = '/register';
 
@@ -10,7 +17,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -18,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -61,11 +68,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         const SizedBox(height: 20.0),
-                        // the username field
+                        // the Name field
                         TextField(
-                          controller: _usernameController,
+                          controller: _nameController,
                           decoration: const InputDecoration(
-                            labelText: 'Username',
+                            labelText: 'Name',
                           ),
                         ),
                         // the email field
@@ -96,7 +103,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.7,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () => widget.onRegister(
+                              _nameController.text,
+                              _emailController.text,
+                              _passwordController.text,
+                            ),
                             child: const Text('Register'),
                           ),
                         ),
@@ -108,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.2,
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () => widget.onLogin(),
                                 child: const Text('Login'),
                               ),
                             ),
@@ -143,11 +154,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       const SizedBox(height: 20.0),
-                      // the username field
+                      // the Name field
                       TextField(
-                        controller: _usernameController,
+                        controller: _nameController,
                         decoration: const InputDecoration(
-                          labelText: 'Username',
+                          labelText: 'Name',
                         ),
                       ),
                       // the email field
@@ -178,7 +189,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.7,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () => widget.onRegister(
+                            _nameController.text,
+                            _emailController.text,
+                            _passwordController.text,
+                          ),
                           child: const Text('Register'),
                         ),
                       ),
@@ -190,7 +205,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.2,
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () => widget.onLogin(),
                               child: const Text('Login'),
                             ),
                           ),

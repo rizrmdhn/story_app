@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:story_app/main.dart';
 import 'package:story_app/provider/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  final Function(String email, String password) onLogin;
+  final Function() onRegister;
+
+  const LoginScreen({
+    Key? key,
+    required this.onLogin,
+    required this.onRegister,
+  }) : super(key: key);
 
   static const String routeName = '/login';
 
@@ -13,14 +19,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isPasswordVisible = false;
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -29,18 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isPasswordVisible = !_isPasswordVisible;
     });
-  }
-
-  void onLogin(String email, String password) {
-    if (email.isEmpty || password.isEmpty) {
-      // throw alert error
-      showMyDialog(
-        'Error',
-        'Email and password cannot be empty',
-      );
-      return;
-    }
-    Provider.of<AuthProvider>(context, listen: false).login(email, password);
   }
 
   @override
@@ -75,11 +69,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             const SizedBox(height: 20.0),
-                            // the username field
+                            // the Email field
                             TextField(
-                              controller: _usernameController,
+                              controller: _emailController,
                               decoration: const InputDecoration(
-                                labelText: 'Username',
+                                labelText: 'Email',
                               ),
                             ),
                             // the password field
@@ -103,9 +97,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.7,
                               child: ElevatedButton(
-                                onPressed: () {
-                                  onLogin(
-                                    _usernameController.text,
+                                onPressed: () async {
+                                  widget.onLogin(
+                                    _emailController.text,
                                     _passwordController.text,
                                   );
                                 },
@@ -122,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.2,
                                   child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () => widget.onRegister(),
                                     child: const Text('Sign up'),
                                   ),
                                 ),
@@ -156,11 +150,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           const SizedBox(height: 20.0),
-                          // the username field
+                          // the Email field
                           TextField(
-                            controller: _usernameController,
+                            controller: _emailController,
                             decoration: const InputDecoration(
-                              labelText: 'Username',
+                              labelText: 'Email',
                             ),
                           ),
                           // the password field
@@ -185,8 +179,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: MediaQuery.of(context).size.width * 0.7,
                             child: ElevatedButton(
                               onPressed: () {
-                                onLogin(
-                                  _usernameController.text,
+                                widget.onLogin(
+                                  _emailController.text,
                                   _passwordController.text,
                                 );
                               },
@@ -202,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.2,
                                 child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () => widget.onRegister(),
                                   child: const Text('Sign up'),
                                 ),
                               ),

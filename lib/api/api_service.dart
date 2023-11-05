@@ -10,10 +10,9 @@ import 'package:http/http.dart' as http;
 class ApiService {
   static String baseUrl = 'https://story-api.dicoding.dev/v1';
 
-  Future<RegisterRepsonse> register(
+  Future<RegisterResponse> register(
       String name, String email, String password) async {
     var url = '$baseUrl/register';
-    var headers = {'Content-Type': 'application/json'};
 
     var body = {
       'name': name,
@@ -24,12 +23,10 @@ class ApiService {
     try {
       var response = await http.post(
         Uri.parse(url),
-        headers: headers,
         body: body,
-        encoding: Encoding.getByName('utf-8'),
       );
 
-      return RegisterRepsonse.fromJson(jsonDecode(response.body));
+      return RegisterResponse.fromJson(jsonDecode(response.body));
     } catch (e) {
       throw Exception(e);
     }
@@ -104,9 +101,12 @@ class ApiService {
     }
   }
 
-  Future<GetAllStoriesResponse> getAllStories() async {
+  Future<GetAllStoriesResponse> getAllStories(LoginResult userToken) async {
     var url = '$baseUrl/stories?location=1';
-    var headers = {'Content-Type': 'application/json'};
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${userToken.token}'
+    };
 
     try {
       var response = await http.get(

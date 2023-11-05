@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:story_app/components/story_card.dart';
+import 'package:story_app/components/my_app_bar.dart';
+import 'package:story_app/components/story_list.dart';
 import 'package:story_app/provider/story_provider.dart';
 
 class StoryScreen extends StatelessWidget {
-  const StoryScreen({Key? key}) : super(key: key);
+  final Function logoutButtonOnPressed;
+
+  const StoryScreen({
+    Key? key,
+    required this.logoutButtonOnPressed,
+  }) : super(key: key);
 
   static const String routeName = '/story';
 
@@ -12,24 +18,24 @@ class StoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<StoryProvider>(
       builder: (context, storyProvider, child) {
-        print(storyProvider.stories.length);
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            title: const Text(
-              'Story',
-              style: TextStyle(color: Colors.white),
-            ),
+          appBar: MyAppBar(
+            title: 'Story',
+            needLogoutButton: true,
+            logoutButtonOnPressed: () => logoutButtonOnPressed(),
           ),
-          body: const Flex(
+          body: Flex(
             direction: Axis.vertical,
             children: [
               Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: StoryCard(),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.015,
+                    left: MediaQuery.of(context).size.width * 0.10,
+                    right: MediaQuery.of(context).size.width * 0.10,
+                    bottom: MediaQuery.of(context).size.height * 0.015,
                   ),
+                  child: const StoryList(),
                 ),
               ),
             ],
