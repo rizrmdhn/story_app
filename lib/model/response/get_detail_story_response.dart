@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:story_app/model/detail_story.dart';
+import 'package:story_app/model/response/error_response.dart';
 
 class GetDetailStoryRepsonse {
   bool error;
@@ -17,12 +18,17 @@ class GetDetailStoryRepsonse {
 
   String toRawJson() => json.encode(toJson());
 
-  factory GetDetailStoryRepsonse.fromJson(Map<String, dynamic> json) =>
-      GetDetailStoryRepsonse(
+  factory GetDetailStoryRepsonse.fromJson(Map<String, dynamic> json) {
+    if (json['error'] == true) {
+      throw ErrorResponse.fromJson(json);
+    } else {
+      return GetDetailStoryRepsonse(
         error: json["error"],
         message: json["message"],
         story: DetailStory.fromJson(json["story"]),
       );
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "error": error,

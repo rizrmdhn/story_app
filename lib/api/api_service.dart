@@ -21,17 +21,17 @@ class ApiService {
       'password': password,
     };
 
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
-      encoding: Encoding.getByName('utf-8'),
-    );
+    try {
+      var response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+        encoding: Encoding.getByName('utf-8'),
+      );
 
-    if (response.statusCode == 200) {
       return RegisterRepsonse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to register');
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -44,23 +44,23 @@ class ApiService {
       'password': password,
     };
 
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
-      encoding: Encoding.getByName('utf-8'),
-    );
+    try {
+      var response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+        encoding: Encoding.getByName('utf-8'),
+      );
 
-    if (response.statusCode == 200) {
       return LoginRepsonse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to login');
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
   Future<AddNewStoryRepsonse> addNewStory(String name, String description,
       String photoUrl, DateTime createdAt, double lat, double lon) async {
-    var url = '$baseUrl/story';
+    var url = '$baseUrl/stories';
     var headers = {'Content-Type': 'application/json'};
 
     var body = {
@@ -72,23 +72,23 @@ class ApiService {
       'lon': lon,
     };
 
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
-      encoding: Encoding.getByName('utf-8'),
-    );
+    try {
+      var response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+        encoding: Encoding.getByName('utf-8'),
+      );
 
-    if (response.statusCode == 200) {
       return AddNewStoryRepsonse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to add new story');
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
   Future<AddNewStoryRepsonseGuest> addNewStoryGuest(String name,
       String description, String photoUrl, double lat, double lon) async {
-    var url = '$baseUrl/story/guest';
+    var url = '$baseUrl/stories/guest';
     var headers = {'Content-Type': 'application/json'};
 
     var body = {
@@ -99,49 +99,52 @@ class ApiService {
       'lon': lon,
     };
 
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
-      encoding: Encoding.getByName('utf-8'),
-    );
+    try {
+      var response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+        encoding: Encoding.getByName('utf-8'),
+      );
 
-    if (response.statusCode == 200) {
       return AddNewStoryRepsonseGuest.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to add new story');
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
-  Future<GetAllStoriesRepsonse> getAllStories() async {
-    var url = '$baseUrl/story';
+  Future<GetAllStoriesResponse> getAllStories() async {
+    var url = '$baseUrl/stories?location=1';
     var headers = {'Content-Type': 'application/json'};
 
-    var response = await http.get(
-      Uri.parse(url),
-      headers: headers,
-    );
-
-    if (response.statusCode == 200) {
-      return GetAllStoriesRepsonse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to get all stories');
+    try {
+      var response = await http.get(
+        Uri.parse(url),
+        headers: headers,
+      );
+      return GetAllStoriesResponse.fromJson(
+        jsonDecode(response.body),
+      );
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
   Future<GetDetailStoryRepsonse> getDetailStory(String id) async {
-    var url = '$baseUrl/story/$id';
+    var url = '$baseUrl/stories/$id';
     var headers = {'Content-Type': 'application/json'};
 
-    var response = await http.get(
-      Uri.parse(url),
-      headers: headers,
-    );
+    try {
+      var response = await http.get(
+        Uri.parse(url),
+        headers: headers,
+      );
 
-    if (response.statusCode == 200) {
-      return GetDetailStoryRepsonse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to get detail story');
+      return GetDetailStoryRepsonse.fromJson(
+        jsonDecode(response.body),
+      );
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

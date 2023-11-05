@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:story_app/model/response/error_response.dart';
+
 class LoginRepsonse {
   bool error;
   String message;
@@ -16,11 +18,17 @@ class LoginRepsonse {
 
   String toRawJson() => json.encode(toJson());
 
-  factory LoginRepsonse.fromJson(Map<String, dynamic> json) => LoginRepsonse(
+  factory LoginRepsonse.fromJson(Map<String, dynamic> json) {
+    if (json['error'] == true) {
+      throw ErrorResponse.fromJson(json);
+    } else {
+      return LoginRepsonse(
         error: json["error"],
         message: json["message"],
         loginResult: LoginResult.fromJson(json["loginResult"]),
       );
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "error": error,

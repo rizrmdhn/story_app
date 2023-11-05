@@ -1,24 +1,28 @@
 import 'dart:convert';
+import 'package:story_app/model/response/error_response.dart';
 import 'package:story_app/model/story.dart';
 
-class GetAllStoriesRepsonse {
+class GetAllStoriesResponse {
   bool error;
   String message;
   List<Story> listStory;
 
-  GetAllStoriesRepsonse({
+  GetAllStoriesResponse({
     required this.error,
     required this.message,
     required this.listStory,
   });
 
-  factory GetAllStoriesRepsonse.fromRawJson(String str) =>
-      GetAllStoriesRepsonse.fromJson(json.decode(str));
+  factory GetAllStoriesResponse.fromRawJson(String str) =>
+      GetAllStoriesResponse.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory GetAllStoriesRepsonse.fromJson(Map<String, dynamic> json) =>
-      GetAllStoriesRepsonse(
+  factory GetAllStoriesResponse.fromJson(Map<String, dynamic> json) {
+    if (json['error'] == true) {
+      throw ErrorResponse.fromJson(json).getErrorMessage();
+    } else {
+      return GetAllStoriesResponse(
         error: json["error"],
         message: json["message"],
         listStory: List<Story>.from(
@@ -27,6 +31,8 @@ class GetAllStoriesRepsonse {
           ),
         ),
       );
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "error": error,

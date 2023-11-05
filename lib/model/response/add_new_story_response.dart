@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:story_app/model/response/error_response.dart';
 
 class AddNewStoryRepsonse {
   bool error;
@@ -14,11 +15,16 @@ class AddNewStoryRepsonse {
 
   String toRawJson() => json.encode(toJson());
 
-  factory AddNewStoryRepsonse.fromJson(Map<String, dynamic> json) =>
-      AddNewStoryRepsonse(
+  factory AddNewStoryRepsonse.fromJson(Map<String, dynamic> json) {
+    if (json['error'] == true) {
+      throw ErrorResponse.fromJson(json);
+    } else {
+      return AddNewStoryRepsonse(
         error: json["error"],
         message: json["message"],
       );
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "error": error,
