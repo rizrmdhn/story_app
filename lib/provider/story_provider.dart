@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -151,5 +152,56 @@ class StoryProvider extends ChangeNotifier {
         e.toString(),
       );
     }
+  }
+
+  void onCameraView() async {
+    final isAndroid = defaultTargetPlatform == TargetPlatform.android;
+    final isiOS = defaultTargetPlatform == TargetPlatform.iOS;
+    final isNotMobile = !(isAndroid || isiOS);
+    if (isNotMobile) {
+      // throw alert error
+      showMyDialog(
+        'Error',
+        'This feature is not available on $defaultTargetPlatform',
+      );
+      return;
+    }
+
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.camera,
+      );
+      notifyListeners();
+
+      if (pickedFile != null) {
+        setImage(pickedFile);
+        setImagePath(pickedFile.path);
+        notifyListeners();
+      }
+    } catch (e) {
+      // throw alert error
+      showMyDialog(
+        'Error',
+        e.toString(),
+      );
+    }
+  }
+
+  void onCustomCameraView() async {
+    final isMacOS = defaultTargetPlatform == TargetPlatform.macOS;
+    final isLinux = defaultTargetPlatform == TargetPlatform.linux;
+    if (isMacOS || isLinux) {
+      // throw alert error
+      showMyDialog(
+        'Error',
+        'This feature is not available on $defaultTargetPlatform',
+      );
+      return;
+    }
+
+    // TODO : implement custom camera view and custom view for camera
+
+    try {} catch (e) {}
   }
 }

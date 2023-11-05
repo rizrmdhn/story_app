@@ -55,6 +55,43 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           // the children should be aligned to the center
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // image placeholder preview
+                            SizedBox(
+                              child: Center(
+                                child: storyProvider.imagePath == null
+                                    ? const Icon(Icons.image, size: 100.0)
+                                    : Image.file(
+                                        File(
+                                          context
+                                              .read<StoryProvider>()
+                                              .imagePath!
+                                              .toString(),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                            const SizedBox(height: 20.0),
+                            // row for gallery and camera
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                // gallery button
+                                ElevatedButton(
+                                  onPressed: () {
+                                    storyProvider.onGalleryView();
+                                  },
+                                  child: const Text('Gallery'),
+                                ),
+                                // camera button
+                                ElevatedButton(
+                                  onPressed: () {
+                                    storyProvider.onCameraView();
+                                  },
+                                  child: const Text('Camera'),
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 20.0),
                             // the form
                             Form(
@@ -112,8 +149,6 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                       children: [
                         // image placeholder preview
                         SizedBox(
-                          width: 350,
-                          height: 250,
                           child: Center(
                             child: storyProvider.imagePath == null
                                 ? const Icon(Icons.image, size: 100.0)
@@ -136,13 +171,15 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                             // gallery button
                             ElevatedButton(
                               onPressed: () {
-                                context.read<StoryProvider>().onGalleryView();
+                                storyProvider.onGalleryView();
                               },
                               child: const Text('Gallery'),
                             ),
                             // camera button
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                storyProvider.onCameraView();
+                              },
                               child: const Text('Camera'),
                             ),
                           ],
