@@ -6,10 +6,12 @@ import 'package:story_app/provider/story_provider.dart';
 
 class StoryScreen extends StatelessWidget {
   final Function logoutButtonOnPressed;
+  final Function onTapped;
 
   const StoryScreen({
     Key? key,
     required this.logoutButtonOnPressed,
+    required this.onTapped,
   }) : super(key: key);
 
   static const String routeName = '/story';
@@ -35,7 +37,9 @@ class StoryScreen extends StatelessWidget {
                     right: MediaQuery.of(context).size.width * 0.10,
                     bottom: MediaQuery.of(context).size.height * 0.015,
                   ),
-                  child: const StoryList(),
+                  child: StoryList(
+                    onTapped: onTapped,
+                  ),
                 ),
               ),
             ],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:story_app/provider/story_provider.dart';
 
 class StoryCard extends StatelessWidget {
   final String id;
@@ -8,6 +10,7 @@ class StoryCard extends StatelessWidget {
   final DateTime createdAt;
   final double lat;
   final double lon;
+  final Function onTapped;
 
   const StoryCard({
     Key? key,
@@ -18,6 +21,7 @@ class StoryCard extends StatelessWidget {
     required this.createdAt,
     required this.lat,
     required this.lon,
+    required this.onTapped,
   }) : super(key: key);
 
   @override
@@ -25,7 +29,10 @@ class StoryCard extends StatelessWidget {
     return Card(
       child: InkWell(
         // make the card clickable
-        onTap: () {},
+        onTap: () async {
+          await context.read<StoryProvider>().getDetailStories(id);
+          onTapped();
+        },
         child: Column(
           children: [
             Image.network(

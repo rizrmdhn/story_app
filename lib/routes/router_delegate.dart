@@ -3,6 +3,7 @@ import 'package:story_app/database/db.dart';
 import 'package:story_app/main.dart';
 import 'package:story_app/model/page_configuration.dart';
 import 'package:story_app/provider/auth_provider.dart';
+import 'package:story_app/screens/detail_story_screen.dart';
 import 'package:story_app/screens/login_screen.dart';
 import 'package:story_app/screens/register_screen.dart';
 import 'package:story_app/screens/splash_screen.dart';
@@ -32,6 +33,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   bool? isUnknown;
   bool? isLoggedIn;
   bool isRegister = false;
+  String? selectedStoryId;
 
   List<Page> historyStack = [];
 
@@ -54,6 +56,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         if (!didPop) {
           return false;
         }
+
+        selectedStoryId = null;
         isRegister = false;
         notifyListeners();
 
@@ -74,6 +78,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
       return PageConfiguration.unknown();
     } else if (isLoggedIn == true) {
       return PageConfiguration.story();
+    } else if (selectedStoryId != null) {
+      return PageConfiguration.storyDetail(selectedStoryId!);
     } else {
       return PageConfiguration.unknown();
     }
@@ -96,6 +102,10 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
     } else if (configuration.isAddStoryPage) {
       isRegister = false;
       isLoggedIn = true;
+    } else if (configuration.isStoryDetailPage) {
+      isRegister = false;
+      isUnknown = false;
+      selectedStoryId = configuration.storyId.toString();
     } else {
       print('Unknown route');
     }
@@ -167,7 +177,18 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
               isLoggedIn = false;
               notifyListeners();
             },
+            onTapped: (String id) async {
+              selectedStoryId = id;
+              notifyListeners();
+            },
           ),
         ),
+        if (selectedStoryId != null)
+          MaterialPage(
+            key: const ValueKey('StoryDetailPage'),
+            child: DetailStoryScreen(
+              storyId: selectedStoryId!,
+            ),
+          ),
       ];
 }

@@ -5,7 +5,12 @@ import 'package:story_app/model/story.dart';
 import 'package:story_app/provider/story_provider.dart';
 
 class StoryList extends StatelessWidget {
-  const StoryList({Key? key}) : super(key: key);
+  final Function onTapped;
+
+  const StoryList({
+    Key? key,
+    required this.onTapped,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +36,7 @@ class StoryList extends StatelessWidget {
                     createdAt: story.createdAt,
                     lat: story.lat,
                     lon: story.lon,
+                    onTapped: () => onTapped(story.id),
                   ),
                 );
               },

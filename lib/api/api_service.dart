@@ -121,9 +121,15 @@ class ApiService {
     }
   }
 
-  Future<GetDetailStoryRepsonse> getDetailStory(String id) async {
+  Future<GetDetailStoryRepsonse> getDetailStory(
+    String id,
+    LoginResult userToken,
+  ) async {
     var url = '$baseUrl/stories/$id';
-    var headers = {'Content-Type': 'application/json'};
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${userToken.token}'
+    };
 
     try {
       var response = await http.get(
