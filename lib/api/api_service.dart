@@ -37,7 +37,6 @@ class ApiService {
 
   Future<LoginRepsonse> login(String email, String password) async {
     var url = '$baseUrl/login';
-    var headers = {'Content-Type': 'application/json'};
 
     var body = {
       'email': email,
@@ -47,9 +46,7 @@ class ApiService {
     try {
       var response = await http.post(
         Uri.parse(url),
-        headers: headers,
         body: body,
-        encoding: Encoding.getByName('utf-8'),
       );
 
       return LoginRepsonse.fromJson(jsonDecode(response.body));
@@ -61,7 +58,6 @@ class ApiService {
   Future<AddNewStoryRepsonse> addNewStory(String name, String description,
       String photoUrl, DateTime createdAt, double lat, double lon) async {
     var url = '$baseUrl/stories';
-    var headers = {'Content-Type': 'application/json'};
 
     var body = {
       'name': name,
@@ -75,9 +71,7 @@ class ApiService {
     try {
       var response = await http.post(
         Uri.parse(url),
-        headers: headers,
         body: body,
-        encoding: Encoding.getByName('utf-8'),
       );
 
       return AddNewStoryRepsonse.fromJson(jsonDecode(response.body));
@@ -89,7 +83,6 @@ class ApiService {
   Future<AddNewStoryRepsonseGuest> addNewStoryGuest(String name,
       String description, String photoUrl, double lat, double lon) async {
     var url = '$baseUrl/stories/guest';
-    var headers = {'Content-Type': 'application/json'};
 
     var body = {
       'name': name,
@@ -102,9 +95,7 @@ class ApiService {
     try {
       var response = await http.post(
         Uri.parse(url),
-        headers: headers,
         body: body,
-        encoding: Encoding.getByName('utf-8'),
       );
 
       return AddNewStoryRepsonseGuest.fromJson(jsonDecode(response.body));

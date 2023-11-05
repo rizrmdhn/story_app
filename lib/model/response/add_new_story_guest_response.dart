@@ -17,7 +17,7 @@ class AddNewStoryRepsonseGuest {
 
   factory AddNewStoryRepsonseGuest.fromJson(Map<String, dynamic> json) {
     if (json['error'] == true) {
-      throw ErrorResponse.fromJson(json);
+      throw ErrorResponse.fromJson(json).getErrorMessage();
     } else {
       return AddNewStoryRepsonseGuest(
         error: json["error"],

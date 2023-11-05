@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app/provider/auth_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
+import 'package:story_app/screens/login_screen.dart';
 import 'package:story_app/screens/story_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -8,7 +10,12 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => StoryProvider()),
+        ChangeNotifierProvider(
+          create: (_) => StoryProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -43,7 +50,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       navigatorKey: navigatorKey,
-      home: const StoryScreen(),
+      home: const LoginScreen(),
     );
   }
 }
