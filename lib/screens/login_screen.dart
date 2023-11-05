@@ -21,20 +21,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  bool _isPasswordVisible = false;
+  final formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
   }
 
   @override
@@ -69,43 +62,72 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             const SizedBox(height: 20.0),
-                            // the Email field
-                            TextField(
-                              controller: _emailController,
-                              decoration: const InputDecoration(
-                                labelText: 'Email',
-                              ),
-                            ),
-                            // the password field
-                            TextField(
-                              controller: _passwordController,
-                              obscureText: !_isPasswordVisible,
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                suffixIcon: IconButton(
-                                  onPressed: _togglePasswordVisibility,
-                                  icon: Icon(
-                                    _isPasswordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
+                            Form(
+                              key: formKey,
+                              child: Column(
+                                children: [
+                                  // the Email field
+                                  TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter your email';
+                                      }
+                                      return null;
+                                    },
+                                    controller: _emailController,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Email',
+                                    ),
                                   ),
-                                ),
+                                  // the password field
+                                  TextFormField(
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter your password';
+                                      }
+                                      return null;
+                                    },
+                                    controller: _passwordController,
+                                    obscureText: value.isPasswordVisible,
+                                    decoration: InputDecoration(
+                                      labelText: 'Password',
+                                      suffixIcon: IconButton(
+                                        onPressed: () {
+                                          value.setIsPasswordVisible(
+                                            !value.isPasswordVisible,
+                                          );
+                                        },
+                                        icon: Icon(
+                                          value.isPasswordVisible
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(height: 20.0),
                             // the login button
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  widget.onLogin(
-                                    _emailController.text,
-                                    _passwordController.text,
-                                  );
-                                },
-                                child: const Text('Login'),
-                              ),
-                            ),
+                            value.isFetching
+                                ? const CircularProgressIndicator()
+                                : SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.7,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        if (formKey.currentState!.validate()) {
+                                          value.setIsFetching(true);
+                                          widget.onLogin(
+                                            _emailController.text,
+                                            _passwordController.text,
+                                          );
+                                        }
+                                      },
+                                      child: const Text('Login'),
+                                    ),
+                                  ),
                             const SizedBox(height: 20.0),
                             // the sign up button
                             Row(
@@ -151,42 +173,72 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 20.0),
                           // the Email field
-                          TextField(
-                            controller: _emailController,
-                            decoration: const InputDecoration(
-                              labelText: 'Email',
-                            ),
-                          ),
-                          // the password field
-                          TextField(
-                            controller: _passwordController,
-                            obscureText: !_isPasswordVisible,
-                            decoration: InputDecoration(
-                              labelText: 'Password',
-                              suffixIcon: IconButton(
-                                onPressed: _togglePasswordVisibility,
-                                icon: Icon(
-                                  _isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
+                          Form(
+                            key: formKey,
+                            child: Column(
+                              children: [
+                                // the Email field
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your email';
+                                    }
+                                    return null;
+                                  },
+                                  controller: _emailController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Email',
+                                  ),
                                 ),
-                              ),
+                                // the password field
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your password';
+                                    }
+                                    return null;
+                                  },
+                                  controller: _passwordController,
+                                  obscureText: value.isPasswordVisible,
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        value.setIsPasswordVisible(
+                                          !value.isPasswordVisible,
+                                        );
+                                      },
+                                      icon: Icon(
+                                        value.isPasswordVisible
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(height: 20.0),
                           // the login button
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                widget.onLogin(
-                                  _emailController.text,
-                                  _passwordController.text,
-                                );
-                              },
-                              child: const Text('Login'),
-                            ),
-                          ),
+                          value.isFetching
+                              ? const CircularProgressIndicator()
+                              : SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+                                        value.setIsFetching(true);
+                                        widget.onLogin(
+                                          _emailController.text,
+                                          _passwordController.text,
+                                        );
+                                      }
+                                    },
+                                    child: const Text('Login'),
+                                  ),
+                                ),
                           const SizedBox(height: 20.0),
                           // the sign up button
                           Row(

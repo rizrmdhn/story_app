@@ -70,6 +70,7 @@ void showMyDialog(String title, String content) {
         actions: [
           TextButton(
             onPressed: () {
+              context.read<AuthProvider>().setIsFetching(false);
               Navigator.of(context).pop();
             },
             child: const Text('OK'),

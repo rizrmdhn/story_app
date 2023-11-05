@@ -12,10 +12,11 @@ class AuthProvider extends ChangeNotifier {
   LoginResult? _userToken;
   bool _isFetching = false;
   bool _isLogin = false;
+  bool _isPasswordVisible = true;
 
   bool get isLogin => _isLogin;
   bool get isFetching => _isFetching;
-
+  bool get isPasswordVisible => _isPasswordVisible;
   LoginResult? get userToken => _userToken;
 
   void setIsLogin(bool isLogin) {
@@ -28,12 +29,17 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setIsPasswordVisible(bool isPasswordVisible) {
+    _isPasswordVisible = isPasswordVisible;
+    notifyListeners();
+  }
+
   Future<LoginResult?> login(String email, String password) async {
     try {
-      setIsFetching(true);
+      _isFetching = true;
+      notifyListeners();
       var response = await _apiService.login(email, password);
       // set user token
-      notifyListeners();
       showMyDialog(
         'Success',
         response.message,
@@ -43,10 +49,9 @@ class AuthProvider extends ChangeNotifier {
         'name': response.loginResult.name,
         'token': response.loginResult.token,
       });
-      notifyListeners();
       return _userToken = response.loginResult;
     } catch (e) {
-      setIsFetching(false);
+      _isFetching = false;
       notifyListeners();
       // throw alert error
       showMyDialog(
@@ -55,7 +60,7 @@ class AuthProvider extends ChangeNotifier {
       );
       return _userToken = null;
     } finally {
-      setIsFetching(false);
+      _isFetching = false;
       notifyListeners();
     }
   }
@@ -63,7 +68,8 @@ class AuthProvider extends ChangeNotifier {
   Future<RegisterResponse> register(
       String name, String email, String password) async {
     try {
-      setIsFetching(true);
+      _isFetching = true;
+      notifyListeners();
       var response = await _apiService.register(name, email, password);
       // set user token
       notifyListeners();
@@ -73,7 +79,7 @@ class AuthProvider extends ChangeNotifier {
       );
       return response;
     } catch (e) {
-      setIsFetching(false);
+      _isFetching = false;
       notifyListeners();
       // throw alert error
       showMyDialog(
@@ -85,14 +91,14 @@ class AuthProvider extends ChangeNotifier {
         message: e.toString(),
       );
     } finally {
-      setIsFetching(false);
+      _isFetching = false;
       notifyListeners();
     }
   }
 
   Future<void> logout() async {
     try {
-      setIsFetching(true);
+      _isFetching = true;
       await _databaseRepository.delete();
       _userToken = null;
       notifyListeners();
@@ -101,7 +107,7 @@ class AuthProvider extends ChangeNotifier {
         'Logout success',
       );
     } catch (e) {
-      setIsFetching(false);
+      _isFetching = false;
       notifyListeners();
       // throw alert error
       showMyDialog(
@@ -109,7 +115,7 @@ class AuthProvider extends ChangeNotifier {
         e.toString(),
       );
     } finally {
-      setIsFetching(false);
+      _isFetching = false;
       notifyListeners();
     }
   }

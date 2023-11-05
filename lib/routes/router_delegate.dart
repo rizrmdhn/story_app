@@ -3,7 +3,6 @@ import 'package:story_app/database/db.dart';
 import 'package:story_app/main.dart';
 import 'package:story_app/model/page_configuration.dart';
 import 'package:story_app/provider/auth_provider.dart';
-import 'package:story_app/screens/add_story_screen.dart';
 import 'package:story_app/screens/login_screen.dart';
 import 'package:story_app/screens/register_screen.dart';
 import 'package:story_app/screens/splash_screen.dart';
@@ -123,25 +122,9 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           key: const ValueKey('LoginPage'),
           child: LoginScreen(
             onLogin: (String email, String password) async {
-              try {
-                if (email.isEmpty || password.isEmpty) {
-                  // throw alert error
-                  showMyDialog(
-                    'Error',
-                    'Email and password cannot be empty',
-                  );
-                  return;
-                }
-                await authProvider.login(email, password);
-                isLoggedIn = true;
-                notifyListeners();
-              } catch (e) {
-                // throw alert error
-                showMyDialog(
-                  'Error',
-                  e.toString(),
-                );
-              }
+              authProvider.setIsFetching(true);
+              await authProvider.login(email, password);
+              isLoggedIn = authProvider.userToken != null;
               notifyListeners();
             },
             onRegister: () {
@@ -167,17 +150,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                   );
                   return;
                 }
-                try {
-                  authProvider.register(name, email, password);
-                  isRegister = false;
-                  notifyListeners();
-                } catch (e) {
-                  // throw alert error
-                  showMyDialog(
-                    'Error',
-                    e.toString(),
-                  );
-                }
+                authProvider.register(name, email, password);
+                isRegister = false;
                 notifyListeners();
               },
             ),
