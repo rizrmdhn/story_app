@@ -8,8 +8,11 @@ import 'package:story_app/provider/localization_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
 
 class AddStoryScreen extends StatefulWidget {
+  final Function addStoryButtonOnPressed;
+
   const AddStoryScreen({
     Key? key,
+    required this.addStoryButtonOnPressed,
   }) : super(key: key);
 
   static const String routeName = '/add_story';
@@ -123,21 +126,45 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                   ),
                                   const SizedBox(height: 20.0),
                                   // the submit button
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.7,
-                                    child: ElevatedButton(
-                                      onPressed: () async {
-                                        await storyProvider.addNewStory(
-                                          _contentController.text,
-                                        );
-                                        await storyProvider.getAllStories();
-                                      },
-                                      child: Text(
-                                        AppLocalizations.of(context)!.upload,
-                                      ),
-                                    ),
-                                  ),
+                                  storyProvider.isFetching
+                                      ? const CircularProgressIndicator()
+                                      : SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.7,
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              var response = await storyProvider
+                                                  .addNewStory(
+                                                _contentController.text,
+                                                AppLocalizations.of(context)!
+                                                    .imageNotFound,
+                                              );
+
+                                              if (response.error == true) {
+                                                widget.addStoryButtonOnPressed(
+                                                  response.error,
+                                                  response.message,
+                                                );
+                                                return;
+                                              } else if (response.error ==
+                                                  false) {
+                                                widget.addStoryButtonOnPressed(
+                                                  response.error,
+                                                  response.message,
+                                                );
+                                              }
+
+                                              await storyProvider
+                                                  .getAllStories();
+                                            },
+                                            child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .upload,
+                                            ),
+                                          ),
+                                        ),
                                 ],
                               ),
                             ),
@@ -232,20 +259,40 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                               ),
                               const SizedBox(height: 20.0),
                               // the submit button
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.7,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    await storyProvider.addNewStory(
-                                      _contentController.text,
-                                    );
-                                    await storyProvider.getAllStories();
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context)!.upload,
-                                  ),
-                                ),
-                              ),
+                              storyProvider.isFetching
+                                  ? const CircularProgressIndicator()
+                                  : SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          var response =
+                                              await storyProvider.addNewStory(
+                                            _contentController.text,
+                                            AppLocalizations.of(context)!
+                                                .imageNotFound,
+                                          );
+
+                                          if (response.error == true) {
+                                            widget.addStoryButtonOnPressed(
+                                              response.error,
+                                              response.message,
+                                            );
+                                            return;
+                                          } else if (response.error == false) {
+                                            widget.addStoryButtonOnPressed(
+                                              response.error,
+                                              response.message,
+                                            );
+                                          }
+
+                                          await storyProvider.getAllStories();
+                                        },
+                                        child: Text(
+                                          AppLocalizations.of(context)!.upload,
+                                        ),
+                                      ),
+                                    )
                             ],
                           ),
                         ),

@@ -26,6 +26,17 @@ class AddNewStoryRepsonseGuest {
     }
   }
 
+  factory AddNewStoryRepsonseGuest.failure(String message) =>
+      AddNewStoryRepsonseGuest(
+        error: true,
+        message: message,
+      );
+
+  factory AddNewStoryRepsonseGuest.success() => AddNewStoryRepsonseGuest(
+        error: false,
+        message: 'Success',
+      );
+
   Map<String, dynamic> toJson() => {
         "error": error,
         "message": message,

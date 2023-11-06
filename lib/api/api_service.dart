@@ -32,11 +32,11 @@ class ApiService {
 
       return RegisterResponse.fromJson(jsonDecode(response.body));
     } catch (e) {
-      throw Exception(e);
+      throw RegisterResponse.failure(e.toString());
     }
   }
 
-  Future<LoginRepsonse> login(String email, String password) async {
+  Future<LoginResponse> login(String email, String password) async {
     var url = '$baseUrl/login';
 
     var body = {
@@ -50,9 +50,9 @@ class ApiService {
         body: body,
       );
 
-      return LoginRepsonse.fromJson(jsonDecode(response.body));
+      return LoginResponse.fromJson(jsonDecode(response.body));
     } catch (e) {
-      throw Exception(e);
+      throw LoginResponse.failure(e.toString());
     }
   }
 
@@ -92,7 +92,7 @@ class ApiService {
 
       return AddNewStoryRepsonse.fromJson(jsonDecode(responseData));
     } catch (e) {
-      throw Exception(e);
+      throw AddNewStoryRepsonse.failure(e.toString());
     }
   }
 
@@ -116,7 +116,7 @@ class ApiService {
 
       return AddNewStoryRepsonseGuest.fromJson(jsonDecode(response.body));
     } catch (e) {
-      throw Exception(e);
+      throw AddNewStoryRepsonseGuest.failure(e.toString());
     }
   }
 
@@ -136,7 +136,7 @@ class ApiService {
         jsonDecode(response.body),
       );
     } catch (e) {
-      throw Exception(e);
+      throw GetAllStoriesResponse.failure(e.toString());
     }
   }
 
@@ -160,7 +160,7 @@ class ApiService {
         jsonDecode(response.body),
       );
     } catch (e) {
-      throw Exception(e);
+      throw GetDetailStoryRepsonse.failure(e.toString());
     }
   }
 }

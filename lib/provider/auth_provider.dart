@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/api/api_service.dart';
 import 'package:story_app/database/preferences.dart';
-import 'package:story_app/localization/main.dart';
-import 'package:story_app/main.dart';
 import 'package:story_app/model/response/login_response.dart';
+import 'package:story_app/model/response/logout_response.dart';
 import 'package:story_app/model/response/register_response.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -35,82 +34,50 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<LoginResult?> login(String email, String password) async {
-    try {
-      _isFetching = true;
-      notifyListeners();
-      var response = await _apiService.login(email, password);
-      // set user token
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.loginSuccess,
-        response.message,
-      );
+  Future<LoginResponse> login(String email, String password) async {
+    _isFetching = true;
+    notifyListeners();
+    var response = await _apiService.login(email, password);
+    // set user token
+
+    if (response.error == false) {
       await _preferences.saveUser(response.loginResult);
-      return _userToken = response.loginResult;
-    } catch (e) {
+      _userToken = response.loginResult;
       _isFetching = false;
-      notifyListeners();
-      // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.loginFailed,
-        e.toString(),
-      );
-      return _userToken = null;
-    } finally {
-      _isFetching = false;
-      notifyListeners();
+      return LoginResponse.success(response.loginResult);
     }
+
+    _isFetching = false;
+    return LoginResponse.failure(response.message);
   }
 
   Future<RegisterResponse> register(
       String name, String email, String password) async {
-    try {
-      _isFetching = true;
-      notifyListeners();
-      var response = await _apiService.register(name, email, password);
-      // set user token
-      notifyListeners();
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.loginSuccess,
-        response.message,
-      );
-      return response;
-    } catch (e) {
+    _isFetching = true;
+    notifyListeners();
+    var response = await _apiService.register(name, email, password);
+
+    if (response.error == false) {
       _isFetching = false;
-      notifyListeners();
-      // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.registerFailed,
-        e.toString(),
-      );
-      return RegisterResponse(
-        error: true,
-        message: e.toString(),
-      );
-    } finally {
-      _isFetching = false;
-      notifyListeners();
+      return RegisterResponse.success();
     }
+
+    _isFetching = false;
+    return RegisterResponse.failure(response.message);
   }
 
-  Future<void> logout() async {
+  Future<LogoutResponse> logout() async {
     try {
       _isFetching = true;
       await _preferences.removeUser();
       _userToken = null;
       notifyListeners();
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.logoutSuccess,
-        'Logout success',
-      );
+      return LogoutResponse.success();
     } catch (e) {
       _isFetching = false;
       notifyListeners();
       // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.loginFailed,
-        e.toString(),
-      );
+      throw LogoutResponse.failure(e.toString());
     } finally {
       _isFetching = false;
       notifyListeners();

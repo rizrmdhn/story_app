@@ -3,6 +3,7 @@ class PageConfiguration {
   final bool? loggedIn;
   final bool isRegister;
   final bool addStory;
+  final bool notification;
   final String? storyId;
 
   PageConfiguration.splash()
@@ -10,6 +11,7 @@ class PageConfiguration {
         loggedIn = null,
         isRegister = false,
         addStory = false,
+        notification = true,
         storyId = null;
 
   PageConfiguration.login()
@@ -17,6 +19,7 @@ class PageConfiguration {
         loggedIn = false,
         isRegister = false,
         addStory = false,
+        notification = true,
         storyId = null;
 
   PageConfiguration.register()
@@ -24,6 +27,7 @@ class PageConfiguration {
         loggedIn = false,
         isRegister = true,
         addStory = false,
+        notification = true,
         storyId = null;
 
   PageConfiguration.story()
@@ -31,6 +35,7 @@ class PageConfiguration {
         loggedIn = true,
         isRegister = false,
         addStory = false,
+        notification = true,
         storyId = null;
 
   PageConfiguration.addStory()
@@ -38,6 +43,7 @@ class PageConfiguration {
         loggedIn = true,
         isRegister = false,
         addStory = true,
+        notification = true,
         storyId = null;
 
   PageConfiguration.storyDetail(String id)
@@ -45,6 +51,7 @@ class PageConfiguration {
         loggedIn = true,
         isRegister = false,
         addStory = false,
+        notification = true,
         storyId = id;
 
   PageConfiguration.unknown()
@@ -52,6 +59,7 @@ class PageConfiguration {
         loggedIn = null,
         isRegister = false,
         addStory = false,
+        notification = false,
         storyId = null;
 
   bool get isSplashPage => unknown == false && loggedIn == null;

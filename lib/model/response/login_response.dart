@@ -2,33 +2,70 @@ import 'dart:convert';
 
 import 'package:story_app/model/response/error_response.dart';
 
-class LoginRepsonse {
+class LoginResponse {
   bool error;
   String message;
   LoginResult loginResult;
 
-  LoginRepsonse({
+  LoginResponse({
     required this.error,
     required this.message,
     required this.loginResult,
   });
 
-  factory LoginRepsonse.fromRawJson(String str) =>
-      LoginRepsonse.fromJson(json.decode(str));
+  factory LoginResponse.fromRawJson(String str) =>
+      LoginResponse.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory LoginRepsonse.fromJson(Map<String, dynamic> json) {
-    if (json['error'] == true) {
-      throw ErrorResponse.fromJson(json).getErrorMessage();
-    } else {
-      return LoginRepsonse(
-        error: json["error"],
-        message: json["message"],
-        loginResult: LoginResult.fromJson(json["loginResult"]),
+  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+    try {
+      if (json['error'] == true) {
+        final errorResponse = ErrorResponse.fromJson(json);
+        return LoginResponse(
+          error: true,
+          message: errorResponse.getErrorMessage(),
+          loginResult: LoginResult(
+            userId: '',
+            name: '',
+            token: '',
+          ),
+        );
+      } else {
+        return LoginResponse(
+          error: json["error"],
+          message: json["message"],
+          loginResult: LoginResult.fromJson(json["loginResult"]),
+        );
+      }
+    } catch (e) {
+      return LoginResponse(
+        error: true,
+        message: 'Error parsing response',
+        loginResult: LoginResult(
+          userId: '',
+          name: '',
+          token: '',
+        ), // Or handle this based on your use case
       );
     }
   }
+
+  factory LoginResponse.failure(String message) => LoginResponse(
+        error: true,
+        message: message,
+        loginResult: LoginResult(
+          userId: '',
+          name: '',
+          token: '',
+        ),
+      );
+
+  factory LoginResponse.success(LoginResult loginResult) => LoginResponse(
+        error: false,
+        message: '',
+        loginResult: loginResult,
+      );
 
   Map<String, dynamic> toJson() => {
         "error": error,

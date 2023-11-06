@@ -30,6 +30,26 @@ class GetDetailStoryRepsonse {
     }
   }
 
+  factory GetDetailStoryRepsonse.failure(String message) =>
+      GetDetailStoryRepsonse(
+        error: true,
+        message: message,
+        story: DetailStory(
+          id: '',
+          description: '',
+          createdAt: DateTime.now(),
+          name: '',
+          photoUrl: '',
+        ),
+      );
+
+  factory GetDetailStoryRepsonse.success(DetailStory story) =>
+      GetDetailStoryRepsonse(
+        error: false,
+        message: 'Success',
+        story: story,
+      );
+
   Map<String, dynamic> toJson() => {
         "error": error,
         "message": message,

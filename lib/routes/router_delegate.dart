@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/database/db.dart';
 import 'package:story_app/database/preferences.dart';
+import 'package:story_app/localization/main.dart';
 import 'package:story_app/model/page_configuration.dart';
 import 'package:story_app/provider/auth_provider.dart';
+import 'package:story_app/provider/localization_provider.dart';
 import 'package:story_app/screens/add_story_screen.dart';
 import 'package:story_app/screens/detail_story_screen.dart';
 import 'package:story_app/screens/login_screen.dart';
+import 'package:story_app/screens/my_dialog.dart';
 import 'package:story_app/screens/register_screen.dart';
 import 'package:story_app/screens/splash_screen.dart';
 import 'package:story_app/screens/story_screen.dart';
@@ -17,6 +20,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   final DatabaseRepository database;
   final AuthProvider authProvider = AuthProvider();
   final Preferences preferences = Preferences();
+  final LocalizationProvider localizationProvider = LocalizationProvider();
 
   MyRouteDelegate(
     this.database,
@@ -37,6 +41,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   bool? addStory;
   bool isRegister = false;
   String? selectedStoryId;
+  String? notificationTitle;
+  String? notificationMessage;
 
   List<Page> historyStack = [];
 
@@ -58,6 +64,33 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         final didPop = route.didPop(result);
         if (!didPop) {
           return false;
+        }
+
+        if (notificationMessage != null &&
+            notificationTitle != null &&
+            addStory == true) {
+          notificationMessage = null;
+          notificationTitle = null;
+          addStory = false;
+          notifyListeners();
+          return true;
+        }
+
+        if (notificationMessage != null &&
+            notificationTitle != null &&
+            isRegister == true) {
+          notificationMessage = null;
+          notificationTitle = null;
+          isRegister = false;
+          notifyListeners();
+          return true;
+        }
+
+        if (notificationMessage != null && notificationTitle != null) {
+          notificationMessage = null;
+          notificationTitle = null;
+          notifyListeners();
+          return true;
         }
 
         selectedStoryId = null;
@@ -134,12 +167,29 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         ),
       ];
 
+  // get context from widget tree in loggedOutStack
+
   List<Page> get _loggedOutStack => [
         MaterialPage(
           key: const ValueKey('LoginPage'),
           child: LoginScreen(
             onLogin: (String email, String password) async {
-              await authProvider.login(email, password);
+              var response = await authProvider.login(email, password);
+              if (response.error == true) {
+                notificationTitle =
+                    AppLocalizations.of(navigatorKey.currentContext!)!
+                        .loginFailed;
+                notificationMessage = response.message;
+                notifyListeners();
+                return;
+              } else if (response.error == false) {
+                notificationTitle =
+                    AppLocalizations.of(navigatorKey.currentContext!)!.success;
+                notificationMessage =
+                    AppLocalizations.of(navigatorKey.currentContext!)!
+                        .loginSuccess;
+              }
+
               isLoggedIn = authProvider.userToken != null;
               notifyListeners();
             },
@@ -158,11 +208,33 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                 notifyListeners();
               },
               onRegister: (name, email, password) async {
-                await authProvider.register(name, email, password);
+                var response =
+                    await authProvider.register(name, email, password);
+
+                if (response.error == true) {
+                  notificationTitle =
+                      AppLocalizations.of(navigatorKey.currentContext!)!
+                          .registerFailed;
+                  notificationMessage = response.message;
+                  notifyListeners();
+                  return;
+                } else if (response.error == false) {
+                  notificationTitle =
+                      AppLocalizations.of(navigatorKey.currentContext!)!
+                          .success;
+                  notificationMessage =
+                      AppLocalizations.of(navigatorKey.currentContext!)!
+                          .registerSuccess;
+                }
                 isRegister = false;
                 notifyListeners();
               },
             ),
+          ),
+        if (notificationTitle != null && notificationMessage != null)
+          MyDialog(
+            title: notificationTitle!,
+            message: notificationMessage!,
           ),
       ];
 
@@ -171,7 +243,21 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           key: const ValueKey('StoryPage'),
           child: StoryScreen(
             logoutButtonOnPressed: () async {
-              await authProvider.logout();
+              var response = await authProvider.logout();
+              if (response.error == true) {
+                notificationTitle =
+                    AppLocalizations.of(navigatorKey.currentContext!)!
+                        .logoutFailed;
+                notificationMessage = response.message;
+                notifyListeners();
+                return;
+              } else if (response.error == false) {
+                notificationTitle =
+                    AppLocalizations.of(navigatorKey.currentContext!)!.success;
+                notificationMessage =
+                    AppLocalizations.of(navigatorKey.currentContext!)!
+                        .logoutSuccess;
+              }
               isLoggedIn = false;
               notifyListeners();
             },
@@ -195,7 +281,31 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         if (addStory == true)
           MaterialPage(
             key: const ValueKey('AddStoryPage'),
-            child: const AddStoryScreen(),
+            child: AddStoryScreen(
+              addStoryButtonOnPressed: (bool error, String message) {
+                if (error == true) {
+                  notificationTitle =
+                      AppLocalizations.of(navigatorKey.currentContext!)!
+                          .addStoryFailed;
+                  notificationMessage = message;
+                  notifyListeners();
+                  return;
+                } else if (error == false) {
+                  notificationTitle =
+                      AppLocalizations.of(navigatorKey.currentContext!)!
+                          .success;
+                  notificationMessage =
+                      AppLocalizations.of(navigatorKey.currentContext!)!
+                          .addStorySuccess;
+                  notifyListeners();
+                }
+              },
+            ),
+          ),
+        if (notificationTitle != null && notificationMessage != null)
+          MyDialog(
+            title: notificationTitle!,
+            message: notificationMessage!,
           ),
       ];
 }

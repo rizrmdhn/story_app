@@ -1,12 +1,9 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:story_app/api/api_service.dart';
 import 'package:story_app/database/preferences.dart';
-import 'package:story_app/localization/main.dart';
-import 'package:story_app/main.dart';
 import 'package:story_app/model/detail_story.dart';
+import 'package:story_app/model/response/add_new_story_response.dart';
 import 'package:story_app/model/story.dart';
 
 class StoryProvider extends ChangeNotifier {
@@ -76,114 +73,70 @@ class StoryProvider extends ChangeNotifier {
   }
 
   Future<List<Story>> getAllStories() async {
-    try {
-      setIsFetching(true);
-      final userToken = await _preferences.getUserToken();
-      final response = await _apiService.getAllStories(userToken);
-      notifyListeners();
-      return _stories = response.listStory;
-    } catch (e) {
+    setIsFetching(true);
+    final userToken = await _preferences.getUserToken();
+    final response = await _apiService.getAllStories(userToken);
+
+    if (response.error == false) {
       setIsFetching(false);
-      setIsLoggingIn(false);
+      _stories = response.listStory;
       notifyListeners();
-      // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.getStoryFailed,
-        e.toString(),
-      );
-      return _stories = [];
-    } finally {
-      setIsFetching(false);
-      notifyListeners();
+      return _stories;
     }
+
+    setIsFetching(false);
+    return _stories;
   }
 
   Future<DetailStory> getDetailStories(String id) async {
-    try {
-      setIsFetching(true);
-      final userToken = await _preferences.getUserToken();
-      final response = await _apiService.getDetailStory(id, userToken);
-      notifyListeners();
-      return _detailStory = response.story;
-    } catch (e) {
+    setIsFetching(true);
+    final userToken = await _preferences.getUserToken();
+    final response = await _apiService.getDetailStory(id, userToken);
+
+    if (response.error == false) {
       setIsFetching(false);
+      _detailStory = response.story;
       notifyListeners();
-      // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.getStoryDetailFailed,
-        e.toString(),
-      );
       return _detailStory;
-    } finally {
-      setIsFetching(false);
-      notifyListeners();
     }
+
+    setIsFetching(false);
+    return _detailStory;
   }
 
-  Future<void> addNewStory(
+  Future<AddNewStoryRepsonse> addNewStory(
     String description,
+    String errorMesssage,
   ) async {
-    try {
-      setIsFetching(true);
-      final userToken = await _preferences.getUserToken();
+    setIsFetching(true);
+    final userToken = await _preferences.getUserToken();
 
-      if (_image == null) {
-        // throw alert error
-        showMyDialog(
-          AppLocalizations.of(navigatorKey.currentContext!)!.addStoryFailed,
-          AppLocalizations.of(navigatorKey.currentContext!)!.imageNotFound,
-        );
-        return;
-      }
-
-      final fileName = _image!.name;
-      final bytes = await _image!.readAsBytes();
-
-      final response = await _apiService.addNewStory(
-        description,
-        bytes,
-        fileName,
-        userToken!,
-      );
-      notifyListeners();
+    if (_image == null) {
       // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.addStorySuccess,
-        response.message,
-      );
-    } catch (e) {
-      setIsFetching(false);
-      notifyListeners();
-      // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.addStoryFailed,
-        e.toString(),
-      );
-      return;
-    } finally {
-      setIsFetching(false);
-      notifyListeners();
+
+      return AddNewStoryRepsonse.failure(errorMesssage);
     }
-  }
 
-  void showImage() async {
-    return kIsWeb
-        ? showMyDialog(
-            AppLocalizations.of(navigatorKey.currentContext!)!.error,
-            'This feature is not available on $defaultTargetPlatform',
-          )
-        : await showDialog(
-            context: navigatorKey.currentContext!,
-            builder: (context) {
-              return AlertDialog(
-                content: Image.file(
-                  File(
-                    imagePath.toString(),
-                  ),
-                ),
-              );
-            },
-          );
+    final fileName = _image!.name;
+    final bytes = await _image!.readAsBytes();
+
+    var response = await _apiService.addNewStory(
+      description,
+      bytes,
+      fileName,
+      userToken!,
+    );
+
+    if (response.error == false) {
+      notifyListeners();
+      sortStories();
+      getAllStories();
+      setIsFetching(false);
+      return AddNewStoryRepsonse.success();
+    }
+
+    setIsFetching(false);
+    return AddNewStoryRepsonse.failure(response.message);
   }
 
   void onGalleryView() async {
@@ -191,10 +144,7 @@ class StoryProvider extends ChangeNotifier {
     final isLinux = defaultTargetPlatform == TargetPlatform.linux;
     if (isMacOS || isLinux) {
       // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.error,
-        'This feature is not available on $defaultTargetPlatform',
-      );
+
       return;
     }
 
@@ -211,11 +161,7 @@ class StoryProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.error,
-        e.toString(),
-      );
+      return;
     }
   }
 
@@ -225,10 +171,7 @@ class StoryProvider extends ChangeNotifier {
     final isNotMobile = !(isAndroid || isiOS);
     if (isNotMobile) {
       // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.error,
-        'This feature is not available on $defaultTargetPlatform',
-      );
+
       return;
     }
 
@@ -246,10 +189,7 @@ class StoryProvider extends ChangeNotifier {
       }
     } catch (e) {
       // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.error,
-        e.toString(),
-      );
+      return;
     }
   }
 
@@ -258,10 +198,7 @@ class StoryProvider extends ChangeNotifier {
     final isLinux = defaultTargetPlatform == TargetPlatform.linux;
     if (isMacOS || isLinux) {
       // throw alert error
-      showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.error,
-        'This feature is not available on $defaultTargetPlatform',
-      );
+
       return;
     }
 

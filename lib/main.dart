@@ -9,7 +9,6 @@ import 'package:story_app/routes/route_information_parser.dart';
 import 'package:story_app/routes/router_delegate.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-final navigatorKey = GlobalKey<NavigatorState>();
 main() async {
   tz.initializeTimeZones();
 
@@ -58,7 +57,6 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      navigatorKey: navigatorKey,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: context.watch<LocalizationProvider>().locale,
@@ -69,25 +67,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
-
-void showMyDialog(String title, String content) {
-  showDialog(
-    context: navigatorKey.currentState!.overlay!.context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: [
-          TextButton(
-            onPressed: () {
-              context.read<AuthProvider>().setIsFetching(false);
-              Navigator.of(context).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
 }

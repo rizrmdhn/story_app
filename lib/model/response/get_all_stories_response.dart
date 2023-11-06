@@ -34,6 +34,20 @@ class GetAllStoriesResponse {
     }
   }
 
+  factory GetAllStoriesResponse.failure(String message) =>
+      GetAllStoriesResponse(
+        error: true,
+        message: message,
+        listStory: [],
+      );
+
+  factory GetAllStoriesResponse.success(List<Story> listStory) =>
+      GetAllStoriesResponse(
+        error: false,
+        message: 'Success',
+        listStory: listStory,
+      );
+
   Map<String, dynamic> toJson() => {
         "error": error,
         "message": message,

@@ -17,15 +17,32 @@ class RegisterResponse {
   String toRawJson() => json.encode(toJson());
 
   factory RegisterResponse.fromJson(Map<String, dynamic> json) {
-    if (json['error'] == true) {
-      throw ErrorResponse.fromJson(json).getErrorMessage();
-    } else {
+    try {
+      if (json['error'] == true) {
+        throw ErrorResponse.fromJson(json).getErrorMessage();
+      } else {
+        return RegisterResponse(
+          error: json["error"],
+          message: json["message"],
+        );
+      }
+    } catch (e) {
       return RegisterResponse(
-        error: json["error"],
-        message: json["message"],
+        error: true,
+        message: e.toString(),
       );
     }
   }
+
+  factory RegisterResponse.failure(String message) => RegisterResponse(
+        error: true,
+        message: message,
+      );
+
+  factory RegisterResponse.success() => RegisterResponse(
+        error: false,
+        message: 'Success',
+      );
 
   Map<String, dynamic> toJson() => {
         "error": error,

@@ -26,6 +26,16 @@ class AddNewStoryRepsonse {
     }
   }
 
+  factory AddNewStoryRepsonse.failure(String message) => AddNewStoryRepsonse(
+        error: true,
+        message: message,
+      );
+
+  factory AddNewStoryRepsonse.success() => AddNewStoryRepsonse(
+        error: false,
+        message: 'Success',
+      );
+
   Map<String, dynamic> toJson() => {
         "error": error,
         "message": message,
