@@ -6,8 +6,6 @@ class DetailStory {
   String description;
   String photoUrl;
   DateTime createdAt;
-  double lat;
-  double lon;
 
   DetailStory({
     required this.id,
@@ -15,8 +13,6 @@ class DetailStory {
     required this.description,
     required this.photoUrl,
     required this.createdAt,
-    required this.lat,
-    required this.lon,
   });
 
   factory DetailStory.fromRawJson(String str) =>
@@ -30,8 +26,6 @@ class DetailStory {
         description: json["description"],
         photoUrl: json["photoUrl"],
         createdAt: DateTime.parse(json["createdAt"]),
-        lat: json["lat"]?.toDouble(),
-        lon: json["lon"]?.toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -40,7 +34,5 @@ class DetailStory {
         "description": description,
         "photoUrl": photoUrl,
         "createdAt": createdAt.toIso8601String(),
-        "lat": lat,
-        "lon": lon,
       };
 }

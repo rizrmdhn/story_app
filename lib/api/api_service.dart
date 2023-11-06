@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:story_app/model/response/add_new_story_guest_response.dart';
 import 'package:story_app/model/response/add_new_story_response.dart';
 import 'package:story_app/model/response/get_all_stories_response.dart';
@@ -52,26 +53,41 @@ class ApiService {
     }
   }
 
-  Future<AddNewStoryRepsonse> addNewStory(String name, String description,
-      String photoUrl, DateTime createdAt, double lat, double lon) async {
+  Future<AddNewStoryRepsonse> addNewStory(
+    String description,
+    List<int> bytes,
+    String fileName,
+    LoginResult userToken,
+  ) async {
     var url = '$baseUrl/stories';
+    http.MultipartRequest request =
+        http.MultipartRequest('POST', Uri.parse(url));
 
-    var body = {
-      'name': name,
-      'description': description,
-      'photoUrl': photoUrl,
-      'createdAt': createdAt.toIso8601String(),
-      'lat': lat,
-      'lon': lon,
+    Map<String, String> headers = {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': 'Bearer ${userToken.token}'
     };
 
-    try {
-      var response = await http.post(
-        Uri.parse(url),
-        body: body,
-      );
+    Map<String, String> body = {
+      'description': description,
+    };
 
-      return AddNewStoryRepsonse.fromJson(jsonDecode(response.body));
+    final multiPartFile = http.MultipartFile.fromBytes(
+      "photo",
+      bytes,
+      filename: fileName,
+    );
+
+    try {
+      request.headers.addAll(headers);
+      request.fields.addAll(body);
+      request.files.add(multiPartFile);
+
+      final http.StreamedResponse streamedResponse = await request.send();
+      final Uint8List responseList = await streamedResponse.stream.toBytes();
+      final String responseData = String.fromCharCodes(responseList);
+
+      return AddNewStoryRepsonse.fromJson(jsonDecode(responseData));
     } catch (e) {
       throw Exception(e);
     }
@@ -102,7 +118,7 @@ class ApiService {
   }
 
   Future<GetAllStoriesResponse> getAllStories(LoginResult userToken) async {
-    var url = '$baseUrl/stories?location=1';
+    var url = '$baseUrl/stories';
     var headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${userToken.token}'

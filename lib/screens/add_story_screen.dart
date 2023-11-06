@@ -6,7 +6,12 @@ import 'package:story_app/localization/main.dart';
 import 'package:story_app/provider/story_provider.dart';
 
 class AddStoryScreen extends StatefulWidget {
-  const AddStoryScreen({Key? key}) : super(key: key);
+  final Function onAddStory;
+
+  const AddStoryScreen({
+    Key? key,
+    required this.onAddStory,
+  }) : super(key: key);
 
   static const String routeName = '/add_story';
 
@@ -15,12 +20,10 @@ class AddStoryScreen extends StatefulWidget {
 }
 
 class _AddStoryScreenState extends State<AddStoryScreen> {
-  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
   @override
   void dispose() {
-    _titleController.dispose();
     _contentController.dispose();
     super.dispose();
   }
@@ -121,7 +124,12 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.7,
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        await storyProvider.addNewStory(
+                                          _contentController.text,
+                                        );
+                                        widget.onAddStory();
+                                      },
                                       child: Text(
                                         AppLocalizations.of(context)!.upload,
                                       ),
@@ -220,7 +228,13 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.7,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await storyProvider.addNewStory(
+                                      _contentController.text,
+                                    );
+                                    widget.onAddStory();
+                                    await storyProvider.getAllStories();
+                                  },
                                   child: Text(
                                     AppLocalizations.of(context)!.upload,
                                   ),

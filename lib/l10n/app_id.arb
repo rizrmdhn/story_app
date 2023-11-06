@@ -36,5 +36,8 @@
   "getStorySuccess": "Berhasil mendapatkan cerita",
   "getStoryFailed": "Gagal mendapatkan cerita",
   "getStoryDetailSuccess": "Berhasil mendapatkan detail cerita",
-  "getStoryDetailFailed": "Gagal mendapatkan detail cerita"
+  "getStoryDetailFailed": "Gagal mendapatkan detail cerita",
+  "addStorySuccess": "Berhasil menambahkan cerita",
+  "addStoryFailed": "Gagal menambahkan cerita",
+  "imageNotFound": "Gambar tidak ditemukan"
 }

@@ -26,7 +26,14 @@ class StoryProvider extends ChangeNotifier {
   bool get isFetching => _isFetching;
 
   StoryProvider() {
+    initDetailStory();
     getAllStories();
+    sortStories();
+  }
+
+  void sortStories() {
+    _stories.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    notifyListeners();
   }
 
   void setIsFetching(bool isFetching) {
@@ -36,13 +43,12 @@ class StoryProvider extends ChangeNotifier {
 
   void initDetailStory() {
     _detailStory = DetailStory(
-        id: '',
-        name: '',
-        description: '',
-        photoUrl: 'abc',
-        createdAt: DateTime.now(),
-        lat: 0,
-        lon: 0);
+      id: '',
+      name: '',
+      description: '',
+      photoUrl: 'abc',
+      createdAt: DateTime.now(),
+    );
     notifyListeners();
   }
 
@@ -100,6 +106,51 @@ class StoryProvider extends ChangeNotifier {
         e.toString(),
       );
       return _detailStory;
+    } finally {
+      setIsFetching(false);
+      notifyListeners();
+    }
+  }
+
+  Future<void> addNewStory(
+    String description,
+  ) async {
+    try {
+      setIsFetching(true);
+      final userToken = await _databaseRepository.getUserToken();
+
+      if (_image == null) {
+        // throw alert error
+        showMyDialog(
+          AppLocalizations.of(navigatorKey.currentContext!)!.addStoryFailed,
+          AppLocalizations.of(navigatorKey.currentContext!)!.imageNotFound,
+        );
+        return;
+      }
+
+      final fileName = _image!.name;
+      final bytes = await _image!.readAsBytes();
+
+      final response = await _apiService.addNewStory(
+        description,
+        bytes,
+        fileName,
+        userToken,
+      );
+      notifyListeners();
+      // throw alert error
+      showMyDialog(
+        AppLocalizations.of(navigatorKey.currentContext!)!.addStorySuccess,
+        response.message,
+      );
+    } catch (e) {
+      setIsFetching(false);
+      notifyListeners();
+      // throw alert error
+      showMyDialog(
+        AppLocalizations.of(navigatorKey.currentContext!)!.addStoryFailed,
+        e.toString(),
+      );
     } finally {
       setIsFetching(false);
       notifyListeners();

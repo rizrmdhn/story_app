@@ -34,8 +34,6 @@ class StoryList extends StatelessWidget {
                     description: story.description,
                     photoUrl: story.photoUrl,
                     createdAt: story.createdAt,
-                    lat: story.lat,
-                    lon: story.lon,
                     onTapped: () => onTapped(story.id),
                   ),
                 );

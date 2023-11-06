@@ -37,5 +37,8 @@
   "getStorySuccess": "Get story success",
   "getStoryFailed": "Failed to get story",
   "getDetailStorySuccess": "Get detail story success",
-  "getDetailStoryFailed": "Failed to get detail story"
+  "getDetailStoryFailed": "Failed to get detail story",
+  "addStorySuccess": "Add story success",
+  "addStoryFailed": "Failed to add story",
+  "imageNotFound": "Image not found"
 }

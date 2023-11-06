@@ -8,8 +8,7 @@ class StoryCard extends StatelessWidget {
   final String description;
   final String photoUrl;
   final DateTime createdAt;
-  final double lat;
-  final double lon;
+
   final Function onTapped;
 
   const StoryCard({
@@ -19,8 +18,6 @@ class StoryCard extends StatelessWidget {
     required this.description,
     required this.photoUrl,
     required this.createdAt,
-    required this.lat,
-    required this.lon,
     required this.onTapped,
   }) : super(key: key);
 
