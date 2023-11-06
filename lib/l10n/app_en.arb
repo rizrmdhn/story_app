@@ -21,5 +21,10 @@
   "emptyPassword": "Please enter your password",
   "emptyName": "Please enter your name",
   "passwordLength": "Password must be at least 8 characters",
-  "invalidEmail": "Invalid email"
+  "invalidEmail": "Invalid email",
+  "success": "Success",
+  "error": "Error",
+  "failed": "Failed",
+  "logoutSuccess": "Logout success",
+  "logoutFailed": "Logout failed"
 }

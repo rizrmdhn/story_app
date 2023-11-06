@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:story_app/components/login_form.dart';
 import 'package:story_app/provider/auth_provider.dart';
 import 'package:story_app/localization/main.dart';
+import 'package:story_app/provider/localization_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function(String email, String password) onLogin;
@@ -34,12 +35,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthProvider>(
-      builder: (context, value, child) {
+    return Consumer2<AuthProvider, LocalizationProvider>(
+      builder: (context, value, localizationProvider, child) {
         return OrientationBuilder(
           builder: (context, orientation) {
             if (orientation == Orientation.landscape) {
               return Scaffold(
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    localizationProvider.setLocale(
+                      localizationProvider.locale == const Locale('en')
+                          ? const Locale('id')
+                          : const Locale('en'),
+                    );
+                  },
+                  child: const Icon(Icons.translate),
+                ),
                 body: Center(
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -122,6 +133,16 @@ class _LoginScreenState extends State<LoginScreen> {
               );
             } else {
               return Scaffold(
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    localizationProvider.setLocale(
+                      localizationProvider.locale == const Locale('en')
+                          ? const Locale('id')
+                          : const Locale('en'),
+                    );
+                  },
+                  child: const Icon(Icons.translate),
+                ),
                 body: Center(
                   child: Padding(
                     padding: EdgeInsets.only(

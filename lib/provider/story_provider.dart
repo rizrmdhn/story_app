@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:story_app/api/api_service.dart';
 import 'package:story_app/database/db.dart';
+import 'package:story_app/localization/main.dart';
 import 'package:story_app/main.dart';
 import 'package:story_app/model/detail_story.dart';
 import 'package:story_app/model/story.dart';
@@ -73,7 +74,7 @@ class StoryProvider extends ChangeNotifier {
       notifyListeners();
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.error,
         e.toString(),
       );
       return _stories = [];
@@ -95,7 +96,7 @@ class StoryProvider extends ChangeNotifier {
       notifyListeners();
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.error,
         e.toString(),
       );
       return _detailStory;
@@ -108,7 +109,7 @@ class StoryProvider extends ChangeNotifier {
   void showImage() async {
     return kIsWeb
         ? showMyDialog(
-            'Error',
+            AppLocalizations.of(navigatorKey.currentContext!)!.error,
             'This feature is not available on $defaultTargetPlatform',
           )
         : await showDialog(
@@ -131,7 +132,7 @@ class StoryProvider extends ChangeNotifier {
     if (isMacOS || isLinux) {
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.error,
         'This feature is not available on $defaultTargetPlatform',
       );
       return;
@@ -152,7 +153,7 @@ class StoryProvider extends ChangeNotifier {
     } catch (e) {
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.error,
         e.toString(),
       );
     }
@@ -165,7 +166,7 @@ class StoryProvider extends ChangeNotifier {
     if (isNotMobile) {
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.error,
         'This feature is not available on $defaultTargetPlatform',
       );
       return;
@@ -186,7 +187,7 @@ class StoryProvider extends ChangeNotifier {
     } catch (e) {
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.error,
         e.toString(),
       );
     }
@@ -198,7 +199,7 @@ class StoryProvider extends ChangeNotifier {
     if (isMacOS || isLinux) {
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.error,
         'This feature is not available on $defaultTargetPlatform',
       );
       return;

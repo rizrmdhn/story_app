@@ -20,5 +20,10 @@
   "emptyPassword": "Tolong masukkan password",
   "emptyName": "Tolong masukkan nama",
   "passwordLength": "Password minimal 8 karakter",
-  "invalidEmail": "Email tidak valid"
+  "invalidEmail": "Email tidak valid",
+  "success": "Berhasil",
+  "error": "Error",
+  "failed": "Gagal",
+  "logoutSuccess": "Berhasil keluar",
+  "logoutFailed": "Gagal keluar"
 }

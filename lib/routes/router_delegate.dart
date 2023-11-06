@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/database/db.dart';
-import 'package:story_app/main.dart';
 import 'package:story_app/model/page_configuration.dart';
 import 'package:story_app/provider/auth_provider.dart';
 import 'package:story_app/screens/add_story_screen.dart';
@@ -158,14 +157,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                 notifyListeners();
               },
               onRegister: (name, email, password) {
-                if (name.isEmpty || email.isEmpty || password.isEmpty) {
-                  // throw alert error
-                  showMyDialog(
-                    'Error',
-                    'Name, email and password cannot be empty',
-                  );
-                  return;
-                }
                 authProvider.register(name, email, password);
                 isRegister = false;
                 notifyListeners();

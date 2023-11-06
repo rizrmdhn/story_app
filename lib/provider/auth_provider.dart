@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/api/api_service.dart';
 import 'package:story_app/database/db.dart';
+import 'package:story_app/localization/main.dart';
 import 'package:story_app/main.dart';
 import 'package:story_app/model/response/login_response.dart';
 import 'package:story_app/model/response/register_response.dart';
@@ -41,7 +42,7 @@ class AuthProvider extends ChangeNotifier {
       var response = await _apiService.login(email, password);
       // set user token
       showMyDialog(
-        'Success',
+        AppLocalizations.of(navigatorKey.currentContext!)!.success,
         response.message,
       );
       await _databaseRepository.insertToDB({
@@ -55,7 +56,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.error,
         e.toString(),
       );
       return _userToken = null;
@@ -74,7 +75,7 @@ class AuthProvider extends ChangeNotifier {
       // set user token
       notifyListeners();
       showMyDialog(
-        'Success',
+        AppLocalizations.of(navigatorKey.currentContext!)!.success,
         response.message,
       );
       return response;
@@ -83,7 +84,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.error,
         e.toString(),
       );
       return RegisterResponse(
@@ -103,7 +104,7 @@ class AuthProvider extends ChangeNotifier {
       _userToken = null;
       notifyListeners();
       showMyDialog(
-        'Success',
+        AppLocalizations.of(navigatorKey.currentContext!)!.success,
         'Logout success',
       );
     } catch (e) {
