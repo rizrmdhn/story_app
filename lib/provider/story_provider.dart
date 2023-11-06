@@ -159,6 +159,7 @@ class StoryProvider extends ChangeNotifier {
         AppLocalizations.of(navigatorKey.currentContext!)!.addStoryFailed,
         e.toString(),
       );
+      return;
     } finally {
       setIsFetching(false);
       notifyListeners();

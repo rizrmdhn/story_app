@@ -4,12 +4,16 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool? needLogoutButton;
   final Function? logoutButtonOnPressed;
+  final bool? needChangeLanguageButton;
+  final Function? changeLanguageButtonOnPressed;
 
   const MyAppBar({
     Key? key,
     required this.title,
     this.needLogoutButton,
     this.logoutButtonOnPressed,
+    this.needChangeLanguageButton,
+    this.changeLanguageButtonOnPressed,
   }) : super(key: key);
 
   @override
@@ -29,6 +33,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () => logoutButtonOnPressed!(),
             icon: const Icon(
               Icons.exit_to_app,
+              color: Colors.white,
+            ),
+          ),
+        if (needChangeLanguageButton == true)
+          IconButton(
+            onPressed: () => changeLanguageButtonOnPressed!(),
+            icon: const Icon(
+              Icons.language,
               color: Colors.white,
             ),
           ),

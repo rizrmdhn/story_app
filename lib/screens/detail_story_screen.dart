@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/components/my_app_bar.dart';
+import 'package:story_app/localization/main.dart';
+import 'package:story_app/provider/localization_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -14,12 +16,22 @@ class DetailStoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StoryProvider>(
-      builder: (context, value, child) => value.isFetching
+    return Consumer2<StoryProvider, LocalizationProvider>(
+      builder: (context, value, localizationProvider, child) => value.isFetching
           ? const Center(child: CircularProgressIndicator())
           : Material(
               child: Scaffold(
-                appBar: const MyAppBar(title: 'Detail Story'),
+                appBar: MyAppBar(
+                  title: AppLocalizations.of(context)!.addStory,
+                  needChangeLanguageButton: true,
+                  changeLanguageButtonOnPressed: () => {
+                    localizationProvider.setLocale(
+                      localizationProvider.locale == const Locale('en')
+                          ? const Locale('id')
+                          : const Locale('en'),
+                    ),
+                  },
+                ),
                 // scroll view
                 body: Container(
                   decoration: const BoxDecoration(

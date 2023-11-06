@@ -87,25 +87,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                             const SizedBox(height: 20.0),
-                            // the login button
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    value.setIsFetching(true);
-                                    widget.onRegister(
-                                      _nameController.text,
-                                      _emailController.text,
-                                      _passwordController.text,
-                                    );
-                                  }
-                                },
-                                child: Text(
-                                  AppLocalizations.of(context)!.register,
-                                ),
-                              ),
-                            ),
+                            // the register button
+                            value.isFetching
+                                ? const CircularProgressIndicator()
+                                : SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.7,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        if (formKey.currentState!.validate()) {
+                                          value.setIsFetching(true);
+                                          await widget.onRegister(
+                                            _nameController.text,
+                                            _emailController.text,
+                                            _passwordController.text,
+                                          );
+                                        }
+                                      },
+                                      child: Text(
+                                        AppLocalizations.of(context)!.register,
+                                      ),
+                                    ),
+                                  ),
                             const SizedBox(height: 20.0),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -173,25 +176,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           const SizedBox(height: 20.0),
-                          // the login button
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  value.setIsFetching(true);
-                                  widget.onRegister(
-                                    _nameController.text,
-                                    _emailController.text,
-                                    _passwordController.text,
-                                  );
-                                }
-                              },
-                              child: Text(
-                                AppLocalizations.of(context)!.register,
-                              ),
-                            ),
-                          ),
+                          // the register button
+                          value.isFetching
+                              ? const CircularProgressIndicator()
+                              : SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      if (formKey.currentState!.validate()) {
+                                        value.setIsFetching(true);
+                                        await widget.onRegister(
+                                          _nameController.text,
+                                          _emailController.text,
+                                          _passwordController.text,
+                                        );
+                                      }
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)!.register,
+                                    ),
+                                  ),
+                                ),
                           const SizedBox(height: 20.0),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

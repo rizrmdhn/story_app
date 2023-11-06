@@ -4,6 +4,7 @@ import 'package:story_app/model/response/login_response.dart';
 class Preferences {
   final String stateKey = 'state';
   final String userTokenKey = 'userTokenKey';
+  final String localeKey = 'locale';
 
   Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
@@ -42,5 +43,15 @@ class Preferences {
         return value.remove(userTokenKey);
       },
     );
+  }
+
+  Future<void> setLocale(String locale) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(localeKey, locale);
+  }
+
+  Future<String> getLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(localeKey) ?? 'en';
   }
 }

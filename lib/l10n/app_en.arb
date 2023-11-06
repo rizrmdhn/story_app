@@ -3,6 +3,7 @@
   "@tittleApp": {
     "description": "Story App is a application for sharing your story with other people."
   },
+  "addStory": "Add Story",
   "gallery": "Gallery",
   "camera": "Camera",
   "customCamera": "Custom Camera",

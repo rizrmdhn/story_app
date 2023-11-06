@@ -2,15 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app/components/my_app_bar.dart';
 import 'package:story_app/localization/main.dart';
+import 'package:story_app/provider/localization_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
 
 class AddStoryScreen extends StatefulWidget {
-  final Function onAddStory;
-
   const AddStoryScreen({
     Key? key,
-    required this.onAddStory,
   }) : super(key: key);
 
   static const String routeName = '/add_story';
@@ -30,18 +29,22 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StoryProvider>(
-      builder: (context, storyProvider, child) {
+    return Consumer2<StoryProvider, LocalizationProvider>(
+      builder: (context, storyProvider, localizationProvider, child) {
         return OrientationBuilder(
           builder: (context, orientation) {
             if (orientation == Orientation.landscape) {
               return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  title: const Text(
-                    'Add Story',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                appBar: MyAppBar(
+                  title: AppLocalizations.of(context)!.addStory,
+                  needChangeLanguageButton: true,
+                  changeLanguageButtonOnPressed: () => {
+                    localizationProvider.setLocale(
+                      localizationProvider.locale == const Locale('en')
+                          ? const Locale('id')
+                          : const Locale('en'),
+                    ),
+                  },
                 ),
                 body: Center(
                   child: Padding(
@@ -128,7 +131,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                         await storyProvider.addNewStory(
                                           _contentController.text,
                                         );
-                                        widget.onAddStory();
+                                        await storyProvider.getAllStories();
                                       },
                                       child: Text(
                                         AppLocalizations.of(context)!.upload,
@@ -147,12 +150,16 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
               );
             } else {
               return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  title: const Text(
-                    'Add Story',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                appBar: MyAppBar(
+                  title: AppLocalizations.of(context)!.addStory,
+                  needChangeLanguageButton: true,
+                  changeLanguageButtonOnPressed: () => {
+                    localizationProvider.setLocale(
+                      localizationProvider.locale == const Locale('en')
+                          ? const Locale('id')
+                          : const Locale('en'),
+                    ),
+                  },
                 ),
                 body: SingleChildScrollView(
                   child: Padding(
@@ -232,7 +239,6 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                     await storyProvider.addNewStory(
                                       _contentController.text,
                                     );
-                                    widget.onAddStory();
                                     await storyProvider.getAllStories();
                                   },
                                   child: Text(

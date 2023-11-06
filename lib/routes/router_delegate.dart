@@ -157,8 +157,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                 isRegister = false;
                 notifyListeners();
               },
-              onRegister: (name, email, password) {
-                authProvider.register(name, email, password);
+              onRegister: (name, email, password) async {
+                await authProvider.register(name, email, password);
                 isRegister = false;
                 notifyListeners();
               },
@@ -179,7 +179,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
               selectedStoryId = id;
               notifyListeners();
             },
-            onAddStoryButtonPressed: () {
+            onAddStoryButtonPressed: () async {
               addStory = true;
               notifyListeners();
             },
@@ -195,12 +195,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         if (addStory == true)
           MaterialPage(
             key: const ValueKey('AddStoryPage'),
-            child: AddStoryScreen(
-              onAddStory: () async {
-                addStory = false;
-                notifyListeners();
-              },
-            ),
+            child: const AddStoryScreen(),
           ),
       ];
 }
