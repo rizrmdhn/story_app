@@ -1,0 +1,24 @@
+{
+  "titleApp": "Story App",
+  "@tittleApp": {
+    "description": "Story App sebuah aplikasi untuk menulis cerita pendek dan berbagi cerita pendek"
+  },
+  "content": "Deskripsi Story Anda",
+  "upload": "Unggah",
+  "login": "Masuk",
+  "register": "Daftar",
+  "dontHaveAccount": "Belum punya akun?",
+  "signUp": "Daftar",
+  "haveAccount": "Sudah punya akun?",
+  "signIn": "Masuk",
+  "name": "Nama",
+  "email": "Email",
+  "password": "Password",
+  "enterEmail": "Masukkan Email",
+  "enterPassword": "Masukkan Password",
+  "emptyEmail": "Tolong masukkan email",
+  "emptyPassword": "Tolong masukkan password",
+  "emptyName": "Tolong masukkan nama",
+  "passwordLength": "Password minimal 8 karakter",
+  "invalidEmail": "Email tidak valid"
+}

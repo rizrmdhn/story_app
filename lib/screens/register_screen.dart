@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app/components/register_form.dart';
 import 'package:story_app/provider/auth_provider.dart';
+import 'package:story_app/localization/main.dart';
 
 class RegisterScreen extends StatefulWidget {
   final Function() onLogin;
@@ -67,65 +71,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             const SizedBox(height: 20.0),
                             Form(
                               key: formKey,
-                              child: Column(
-                                children: [
-                                  // the Name field
-                                  TextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your name';
-                                      }
-                                      return null;
-                                    },
-                                    controller: _nameController,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Name',
-                                    ),
-                                  ),
-                                  // the email field
-                                  TextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your email';
-                                      }
-
-                                      return null;
-                                    },
-                                    controller: _emailController,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Email',
-                                    ),
-                                  ),
-                                  // the password field
-                                  TextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your password';
-                                      }
-                                      if (value.length < 8) {
-                                        return 'Password must be at least 8 characters';
-                                      }
-                                      return null;
-                                    },
-                                    controller: _passwordController,
-                                    obscureText: value.isPasswordVisible,
-                                    decoration: InputDecoration(
-                                      labelText: 'Password',
-                                      suffixIcon: IconButton(
-                                        onPressed: () {
-                                          value.setIsPasswordVisible(
-                                            !value.isPasswordVisible,
-                                          );
-                                        },
-                                        icon: Icon(
-                                          value.isPasswordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              child: RegisterForm(
+                                nameController: _nameController,
+                                emailController: _emailController,
+                                passwordController: _passwordController,
                               ),
                             ),
                             const SizedBox(height: 20.0),
@@ -143,20 +92,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     );
                                   }
                                 },
-                                child: const Text('Register'),
+                                child: Text(
+                                  AppLocalizations.of(context)!.register,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 20.0),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text('Already have an account?'),
+                                Text(
+                                  AppLocalizations.of(context)!.haveAccount,
+                                ),
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.2,
                                   child: TextButton(
                                     onPressed: () => widget.onLogin(),
-                                    child: const Text('Login'),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.login,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -192,65 +147,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 20.0),
                           Form(
                             key: formKey,
-                            child: Column(
-                              children: [
-                                // the Name field
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your name';
-                                    }
-                                    return null;
-                                  },
-                                  controller: _nameController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Name',
-                                  ),
-                                ),
-                                // the email field
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your email';
-                                    }
-
-                                    return null;
-                                  },
-                                  controller: _emailController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Email',
-                                  ),
-                                ),
-                                // the password field
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your password';
-                                    }
-                                    if (value.length < 8) {
-                                      return 'Password must be at least 8 characters';
-                                    }
-                                    return null;
-                                  },
-                                  controller: _passwordController,
-                                  obscureText: value.isPasswordVisible,
-                                  decoration: InputDecoration(
-                                    labelText: 'Password',
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        value.setIsPasswordVisible(
-                                          !value.isPasswordVisible,
-                                        );
-                                      },
-                                      icon: Icon(
-                                        value.isPasswordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            child: RegisterForm(
+                              nameController: _nameController,
+                              emailController: _emailController,
+                              passwordController: _passwordController,
                             ),
                           ),
                           const SizedBox(height: 20.0),
@@ -268,19 +168,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   );
                                 }
                               },
-                              child: const Text('Register'),
+                              child: Text(
+                                AppLocalizations.of(context)!.register,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 20.0),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text('Already have an account?'),
+                              Text(
+                                AppLocalizations.of(context)!.haveAccount,
+                              ),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.2,
                                 child: TextButton(
                                   onPressed: () => widget.onLogin(),
-                                  child: const Text('Login'),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.login,
+                                  ),
                                 ),
                               ),
                             ],

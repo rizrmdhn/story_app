@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app/components/login_form.dart';
 import 'package:story_app/provider/auth_provider.dart';
+import 'package:story_app/localization/main.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function(String email, String password) onLogin;
@@ -64,48 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: 20.0),
                             Form(
                               key: formKey,
-                              child: Column(
-                                children: [
-                                  // the Email field
-                                  TextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your email';
-                                      }
-                                      return null;
-                                    },
-                                    controller: _emailController,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Email',
-                                    ),
-                                  ),
-                                  // the password field
-                                  TextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your password';
-                                      }
-                                      return null;
-                                    },
-                                    controller: _passwordController,
-                                    obscureText: value.isPasswordVisible,
-                                    decoration: InputDecoration(
-                                      labelText: 'Password',
-                                      suffixIcon: IconButton(
-                                        onPressed: () {
-                                          value.setIsPasswordVisible(
-                                            !value.isPasswordVisible,
-                                          );
-                                        },
-                                        icon: Icon(
-                                          value.isPasswordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              child: LoginForm(
+                                emailController: _emailController,
+                                passwordController: _passwordController,
                               ),
                             ),
                             const SizedBox(height: 20.0),
@@ -125,7 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           );
                                         }
                                       },
-                                      child: const Text('Login'),
+                                      child: Text(
+                                        AppLocalizations.of(context)!.login,
+                                      ),
                                     ),
                                   ),
                             const SizedBox(height: 20.0),
@@ -133,13 +98,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text('Don\'t have an account?'),
+                                Text(
+                                  AppLocalizations.of(context)!.dontHaveAccount,
+                                ),
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.2,
                                   child: TextButton(
                                     onPressed: () => widget.onRegister(),
-                                    child: const Text('Sign up'),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.signUp,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -175,48 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           // the Email field
                           Form(
                             key: formKey,
-                            child: Column(
-                              children: [
-                                // the Email field
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your email';
-                                    }
-                                    return null;
-                                  },
-                                  controller: _emailController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Email',
-                                  ),
-                                ),
-                                // the password field
-                                TextFormField(
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your password';
-                                    }
-                                    return null;
-                                  },
-                                  controller: _passwordController,
-                                  obscureText: value.isPasswordVisible,
-                                  decoration: InputDecoration(
-                                    labelText: 'Password',
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        value.setIsPasswordVisible(
-                                          !value.isPasswordVisible,
-                                        );
-                                      },
-                                      icon: Icon(
-                                        value.isPasswordVisible
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            child: LoginForm(
+                              emailController: _emailController,
+                              passwordController: _passwordController,
                             ),
                           ),
                           const SizedBox(height: 20.0),
@@ -236,7 +166,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                         );
                                       }
                                     },
-                                    child: const Text('Login'),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.login,
+                                    ),
                                   ),
                                 ),
                           const SizedBox(height: 20.0),
@@ -244,12 +176,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text('Don\'t have an account?'),
+                              Text(
+                                AppLocalizations.of(context)!.dontHaveAccount,
+                              ),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.2,
                                 child: TextButton(
                                   onPressed: () => widget.onRegister(),
-                                  child: const Text('Sign up'),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.signUp,
+                                  ),
                                 ),
                               ),
                             ],

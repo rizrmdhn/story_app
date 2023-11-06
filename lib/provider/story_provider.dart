@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,6 +52,12 @@ class StoryProvider extends ChangeNotifier {
 
   void setImagePath(String value) {
     _imagePath = value;
+    notifyListeners();
+  }
+
+  void deleteImage() {
+    _image = null;
+    _imagePath = null;
     notifyListeners();
   }
 
