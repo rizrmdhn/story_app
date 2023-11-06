@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:story_app/api/api_service.dart';
-import 'package:story_app/database/db.dart';
+import 'package:story_app/database/preferences.dart';
 import 'package:story_app/localization/main.dart';
 import 'package:story_app/main.dart';
 import 'package:story_app/model/detail_story.dart';
@@ -11,18 +11,20 @@ import 'package:story_app/model/story.dart';
 
 class StoryProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
-  final DatabaseRepository _databaseRepository = DatabaseRepository();
+  final Preferences _preferences = Preferences();
 
   List<Story> _stories = [];
   late DetailStory _detailStory;
   XFile? _image;
   String? _imagePath;
+  bool _isLoggingIn = false;
   bool _isFetching = false;
 
   List<Story> get stories => _stories;
   DetailStory get detailStory => _detailStory;
   XFile? get image => _image;
   String? get imagePath => _imagePath;
+  bool get isLoggingIn => _isLoggingIn;
   bool get isFetching => _isFetching;
 
   StoryProvider() {
@@ -38,6 +40,11 @@ class StoryProvider extends ChangeNotifier {
 
   void setIsFetching(bool isFetching) {
     _isFetching = isFetching;
+    notifyListeners();
+  }
+
+  void setIsLoggingIn(bool isLoggingIn) {
+    _isLoggingIn = isLoggingIn;
     notifyListeners();
   }
 
@@ -71,12 +78,13 @@ class StoryProvider extends ChangeNotifier {
   Future<List<Story>> getAllStories() async {
     try {
       setIsFetching(true);
-      final userToken = await _databaseRepository.getUserToken();
+      final userToken = await _preferences.getUserToken();
       final response = await _apiService.getAllStories(userToken);
       notifyListeners();
       return _stories = response.listStory;
     } catch (e) {
       setIsFetching(false);
+      setIsLoggingIn(false);
       notifyListeners();
       // throw alert error
       showMyDialog(
@@ -93,7 +101,7 @@ class StoryProvider extends ChangeNotifier {
   Future<DetailStory> getDetailStories(String id) async {
     try {
       setIsFetching(true);
-      final userToken = await _databaseRepository.getUserToken();
+      final userToken = await _preferences.getUserToken();
       final response = await _apiService.getDetailStory(id, userToken);
       notifyListeners();
       return _detailStory = response.story;
@@ -117,7 +125,7 @@ class StoryProvider extends ChangeNotifier {
   ) async {
     try {
       setIsFetching(true);
-      final userToken = await _databaseRepository.getUserToken();
+      final userToken = await _preferences.getUserToken();
 
       if (_image == null) {
         // throw alert error
@@ -135,7 +143,7 @@ class StoryProvider extends ChangeNotifier {
         description,
         bytes,
         fileName,
-        userToken,
+        userToken!,
       );
       notifyListeners();
       // throw alert error

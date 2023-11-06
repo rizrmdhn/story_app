@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/database/db.dart';
+import 'package:story_app/database/preferences.dart';
 import 'package:story_app/model/page_configuration.dart';
 import 'package:story_app/provider/auth_provider.dart';
-import 'package:story_app/provider/story_provider.dart';
 import 'package:story_app/screens/add_story_screen.dart';
 import 'package:story_app/screens/detail_story_screen.dart';
 import 'package:story_app/screens/login_screen.dart';
@@ -16,7 +16,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   final GlobalKey<NavigatorState> _navigatorKey;
   final DatabaseRepository database;
   final AuthProvider authProvider = AuthProvider();
-  final StoryProvider storyProvider = StoryProvider();
+  final Preferences preferences = Preferences();
 
   MyRouteDelegate(
     this.database,
@@ -25,7 +25,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   }
 
   void _init() async {
-    isLoggedIn = await database.isLoggedIn();
+    isLoggedIn = await preferences.getUserToken() != null;
     notifyListeners();
   }
 
@@ -139,7 +139,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           key: const ValueKey('LoginPage'),
           child: LoginScreen(
             onLogin: (String email, String password) async {
-              authProvider.setIsFetching(true);
               await authProvider.login(email, password);
               isLoggedIn = authProvider.userToken != null;
               notifyListeners();
@@ -199,7 +198,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             child: AddStoryScreen(
               onAddStory: () async {
                 addStory = false;
-                await storyProvider.getAllStories();
                 notifyListeners();
               },
             ),

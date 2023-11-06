@@ -12,7 +12,10 @@ class ApiService {
   static String baseUrl = 'https://story-api.dicoding.dev/v1';
 
   Future<RegisterResponse> register(
-      String name, String email, String password) async {
+    String name,
+    String email,
+    String password,
+  ) async {
     var url = '$baseUrl/register';
 
     var body = {
@@ -57,7 +60,7 @@ class ApiService {
     String description,
     List<int> bytes,
     String fileName,
-    LoginResult userToken,
+    String userToken,
   ) async {
     var url = '$baseUrl/stories';
     http.MultipartRequest request =
@@ -65,7 +68,7 @@ class ApiService {
 
     Map<String, String> headers = {
       'Content-Type': 'multipart/form-data',
-      'Authorization': 'Bearer ${userToken.token}'
+      'Authorization': 'Bearer $userToken'
     };
 
     Map<String, String> body = {
@@ -117,11 +120,11 @@ class ApiService {
     }
   }
 
-  Future<GetAllStoriesResponse> getAllStories(LoginResult userToken) async {
+  Future<GetAllStoriesResponse> getAllStories(String? userToken) async {
     var url = '$baseUrl/stories';
     var headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${userToken.token}'
+      'Authorization': 'Bearer $userToken'
     };
 
     try {
@@ -139,12 +142,12 @@ class ApiService {
 
   Future<GetDetailStoryRepsonse> getDetailStory(
     String id,
-    LoginResult userToken,
+    String? userToken,
   ) async {
     var url = '$baseUrl/stories/$id';
     var headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${userToken.token}'
+      'Authorization': 'Bearer $userToken'
     };
 
     try {

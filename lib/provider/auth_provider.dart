@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/api/api_service.dart';
-import 'package:story_app/database/db.dart';
+import 'package:story_app/database/preferences.dart';
 import 'package:story_app/localization/main.dart';
 import 'package:story_app/main.dart';
 import 'package:story_app/model/response/login_response.dart';
@@ -8,7 +8,7 @@ import 'package:story_app/model/response/register_response.dart';
 
 class AuthProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
-  final DatabaseRepository _databaseRepository = DatabaseRepository();
+  final Preferences _preferences = Preferences();
 
   LoginResult? _userToken;
   bool _isFetching = false;
@@ -45,11 +45,7 @@ class AuthProvider extends ChangeNotifier {
         AppLocalizations.of(navigatorKey.currentContext!)!.loginSuccess,
         response.message,
       );
-      await _databaseRepository.insertToDB({
-        'userId': response.loginResult.userId,
-        'name': response.loginResult.name,
-        'token': response.loginResult.token,
-      });
+      await _preferences.saveUser(response.loginResult);
       return _userToken = response.loginResult;
     } catch (e) {
       _isFetching = false;
@@ -100,7 +96,7 @@ class AuthProvider extends ChangeNotifier {
   Future<void> logout() async {
     try {
       _isFetching = true;
-      await _databaseRepository.delete();
+      await _preferences.removeUser();
       _userToken = null;
       notifyListeners();
       showMyDialog(
