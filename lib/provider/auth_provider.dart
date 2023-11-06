@@ -42,7 +42,7 @@ class AuthProvider extends ChangeNotifier {
       var response = await _apiService.login(email, password);
       // set user token
       showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.success,
+        AppLocalizations.of(navigatorKey.currentContext!)!.loginSuccess,
         response.message,
       );
       await _databaseRepository.insertToDB({
@@ -56,7 +56,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       // throw alert error
       showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.error,
+        AppLocalizations.of(navigatorKey.currentContext!)!.loginFailed,
         e.toString(),
       );
       return _userToken = null;
@@ -75,7 +75,7 @@ class AuthProvider extends ChangeNotifier {
       // set user token
       notifyListeners();
       showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.success,
+        AppLocalizations.of(navigatorKey.currentContext!)!.loginSuccess,
         response.message,
       );
       return response;
@@ -84,7 +84,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       // throw alert error
       showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.error,
+        AppLocalizations.of(navigatorKey.currentContext!)!.registerFailed,
         e.toString(),
       );
       return RegisterResponse(
@@ -104,7 +104,7 @@ class AuthProvider extends ChangeNotifier {
       _userToken = null;
       notifyListeners();
       showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.success,
+        AppLocalizations.of(navigatorKey.currentContext!)!.logoutSuccess,
         'Logout success',
       );
     } catch (e) {
@@ -112,7 +112,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       // throw alert error
       showMyDialog(
-        'Error',
+        AppLocalizations.of(navigatorKey.currentContext!)!.loginFailed,
         e.toString(),
       );
     } finally {

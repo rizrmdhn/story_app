@@ -74,7 +74,7 @@ class StoryProvider extends ChangeNotifier {
       notifyListeners();
       // throw alert error
       showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.error,
+        AppLocalizations.of(navigatorKey.currentContext!)!.getStoryFailed,
         e.toString(),
       );
       return _stories = [];
@@ -96,7 +96,7 @@ class StoryProvider extends ChangeNotifier {
       notifyListeners();
       // throw alert error
       showMyDialog(
-        AppLocalizations.of(navigatorKey.currentContext!)!.error,
+        AppLocalizations.of(navigatorKey.currentContext!)!.getStoryDetailFailed,
         e.toString(),
       );
       return _detailStory;

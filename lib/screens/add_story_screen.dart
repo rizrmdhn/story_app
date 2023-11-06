@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app/localization/main.dart';
 import 'package:story_app/provider/story_provider.dart';
 
 class AddStoryScreen extends StatefulWidget {
@@ -82,14 +83,18 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                   onPressed: () {
                                     storyProvider.onGalleryView();
                                   },
-                                  child: const Text('Gallery'),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.gallery,
+                                  ),
                                 ),
                                 // camera button
                                 ElevatedButton(
                                   onPressed: () {
                                     storyProvider.onCameraView();
                                   },
-                                  child: const Text('Camera'),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.camera,
+                                  ),
                                 ),
                               ],
                             ),
@@ -102,10 +107,11 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                   // the content field
                                   TextFormField(
                                     controller: _contentController,
-                                    decoration: const InputDecoration(
+                                    decoration: InputDecoration(
                                       alignLabelWithHint: true,
-                                      labelText: 'Content',
-                                      border: OutlineInputBorder(),
+                                      labelText:
+                                          AppLocalizations.of(context)!.content,
+                                      border: const OutlineInputBorder(),
                                     ),
                                     maxLines: 5,
                                   ),
@@ -116,7 +122,9 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                         MediaQuery.of(context).size.width * 0.7,
                                     child: ElevatedButton(
                                       onPressed: () {},
-                                      child: const Text('Upload'),
+                                      child: Text(
+                                        AppLocalizations.of(context)!.upload,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -175,14 +183,18 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                               onPressed: () {
                                 storyProvider.onGalleryView();
                               },
-                              child: const Text('Gallery'),
+                              child: Text(
+                                AppLocalizations.of(context)!.gallery,
+                              ),
                             ),
                             // camera button
                             ElevatedButton(
                               onPressed: () {
                                 storyProvider.onCameraView();
                               },
-                              child: const Text('Camera'),
+                              child: Text(
+                                AppLocalizations.of(context)!.camera,
+                              ),
                             ),
                           ],
                         ),
@@ -195,10 +207,11 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                               // the content field
                               TextFormField(
                                 controller: _contentController,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   alignLabelWithHint: true,
-                                  labelText: 'Content',
-                                  border: OutlineInputBorder(),
+                                  labelText:
+                                      AppLocalizations.of(context)!.content,
+                                  border: const OutlineInputBorder(),
                                 ),
                                 maxLines: 5,
                               ),
@@ -208,7 +221,9 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                 width: MediaQuery.of(context).size.width * 0.7,
                                 child: ElevatedButton(
                                   onPressed: () {},
-                                  child: const Text('Upload'),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.upload,
+                                  ),
                                 ),
                               ),
                             ],

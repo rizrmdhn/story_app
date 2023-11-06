@@ -3,6 +3,9 @@
   "@tittleApp": {
     "description": "Story App sebuah aplikasi untuk menulis cerita pendek dan berbagi cerita pendek"
   },
+  "gallery": "Galeri",
+  "camera": "Kamera",
+  "customCamera": "Kamera Kustom",
   "content": "Deskripsi Story Anda",
   "upload": "Unggah",
   "login": "Masuk",
@@ -24,6 +27,14 @@
   "success": "Berhasil",
   "error": "Error",
   "failed": "Gagal",
+  "loginSuccess": "Berhasil masuk",
+  "loginFailed": "Gagal masuk",
+  "registerSuccess": "Berhasil mendaftar",
+  "registerFailed": "Gagal mendaftar",
   "logoutSuccess": "Berhasil keluar",
-  "logoutFailed": "Gagal keluar"
+  "logoutFailed": "Gagal keluar",
+  "getStorySuccess": "Berhasil mendapatkan cerita",
+  "getStoryFailed": "Gagal mendapatkan cerita",
+  "getStoryDetailSuccess": "Berhasil mendapatkan detail cerita",
+  "getStoryDetailFailed": "Gagal mendapatkan detail cerita"
 }

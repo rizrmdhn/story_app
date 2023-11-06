@@ -3,6 +3,9 @@
   "@tittleApp": {
     "description": "Story App is a application for sharing your story with other people."
   },
+  "gallery": "Gallery",
+  "camera": "Camera",
+  "customCamera": "Custom Camera",
   "content": "Your story description",
   "upload": "Upload",
   "login": "Login",
@@ -25,6 +28,14 @@
   "success": "Success",
   "error": "Error",
   "failed": "Failed",
+  "loginSuccess": "Login success",
+  "loginFailed": "Login failed",
+  "registerSuccess": "Register success",
+  "registerFailed": "Register failed",
   "logoutSuccess": "Logout success",
-  "logoutFailed": "Logout failed"
+  "logoutFailed": "Logout failed",
+  "getStorySuccess": "Get story success",
+  "getStoryFailed": "Failed to get story",
+  "getDetailStorySuccess": "Get detail story success",
+  "getDetailStoryFailed": "Failed to get detail story"
 }
