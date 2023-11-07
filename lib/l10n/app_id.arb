@@ -40,5 +40,8 @@
   "getStoryDetailFailed": "Gagal mendapatkan detail cerita",
   "addStorySuccess": "Berhasil menambahkan cerita",
   "addStoryFailed": "Gagal menambahkan cerita",
-  "imageNotFound": "Gambar tidak ditemukan"
+  "imageNotFound": "Gambar tidak ditemukan",
+  "networkError": "Koneksi bermasalah",
+  "networkErrorMessage": "Tolong periksa koneksi internet Anda",
+  "serverError": "Server bermasalah"
 }

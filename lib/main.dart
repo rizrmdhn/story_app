@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:story_app/database/db.dart';
 import 'package:story_app/localization/main.dart';
 import 'package:story_app/provider/auth_provider.dart';
+import 'package:story_app/provider/connectivity_provider.dart';
 import 'package:story_app/provider/localization_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
 import 'package:story_app/routes/route_information_parser.dart';
@@ -23,6 +24,9 @@ main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => LocalizationProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ConnectivityProvider(),
         ),
       ],
       child: const MyApp(),

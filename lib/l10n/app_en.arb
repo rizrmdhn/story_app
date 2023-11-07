@@ -41,5 +41,8 @@
   "getDetailStoryFailed": "Failed to get detail story",
   "addStorySuccess": "Add story success",
   "addStoryFailed": "Failed to add story",
-  "imageNotFound": "Image not found"
+  "imageNotFound": "Image not found",
+  "networkError": "Network error",
+  "networkErrorMessage": "Please check your internet connection",
+  "serverError": "Server error"
 }

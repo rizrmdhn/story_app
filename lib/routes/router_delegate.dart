@@ -4,6 +4,7 @@ import 'package:story_app/database/preferences.dart';
 import 'package:story_app/localization/main.dart';
 import 'package:story_app/model/page_configuration.dart';
 import 'package:story_app/provider/auth_provider.dart';
+import 'package:story_app/provider/connectivity_provider.dart';
 import 'package:story_app/provider/localization_provider.dart';
 import 'package:story_app/screens/add_story_screen.dart';
 import 'package:story_app/screens/detail_story_screen.dart';
@@ -21,6 +22,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   final AuthProvider authProvider = AuthProvider();
   final Preferences preferences = Preferences();
   final LocalizationProvider localizationProvider = LocalizationProvider();
+  final ConnectivityProvider connectivityProvider = ConnectivityProvider();
 
   MyRouteDelegate(
     this.database,
@@ -30,6 +32,14 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
 
   void _init() async {
     isLoggedIn = await preferences.getUserToken() != null;
+    await connectivityProvider.initConnectivity();
+    var connectionStatus = connectivityProvider.connectionStatus.toString();
+    if (connectionStatus == 'ConnectivityResult.none') {
+      networkStatus = AppLocalizations.of(navigatorKey.currentContext!)!
+          .networkErrorMessage;
+      noConnection = true;
+      notifyListeners();
+    }
     notifyListeners();
   }
 
@@ -39,10 +49,12 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   bool? isUnknown;
   bool? isLoggedIn;
   bool? addStory;
+  bool? noConnection;
   bool isRegister = false;
   String? selectedStoryId;
   String? notificationTitle;
   String? notificationMessage;
+  String? networkStatus;
 
   List<Page> historyStack = [];
 
@@ -64,6 +76,21 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         final didPop = route.didPop(result);
         if (!didPop) {
           return false;
+        }
+
+        if (networkStatus != null && noConnection == true) {
+          connectivityProvider.initConnectivity();
+          var newConnectionStatus =
+              connectivityProvider.connectionStatus.toString();
+          if (newConnectionStatus != 'ConnectivityResult.none') {
+            networkStatus = null;
+            noConnection = false;
+            notificationMessage = null;
+            notificationTitle = null;
+            notifyListeners();
+          }
+          notifyListeners();
+          return true;
         }
 
         if (notificationMessage != null &&
@@ -167,8 +194,6 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         ),
       ];
 
-  // get context from widget tree in loggedOutStack
-
   List<Page> get _loggedOutStack => [
         MaterialPage(
           key: const ValueKey('LoginPage'),
@@ -235,6 +260,13 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           MyDialog(
             title: notificationTitle!,
             message: notificationMessage!,
+          ),
+        if (networkStatus != null && noConnection == true)
+          MyDialog(
+            title:
+                AppLocalizations.of(navigatorKey.currentContext!)!.networkError,
+            message: AppLocalizations.of(navigatorKey.currentContext!)!
+                .networkErrorMessage,
           ),
       ];
 
@@ -306,6 +338,13 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           MyDialog(
             title: notificationTitle!,
             message: notificationMessage!,
+          ),
+        if (networkStatus != null && noConnection == true)
+          MyDialog(
+            title:
+                AppLocalizations.of(navigatorKey.currentContext!)!.networkError,
+            message: AppLocalizations.of(navigatorKey.currentContext!)!
+                .networkErrorMessage,
           ),
       ];
 }
