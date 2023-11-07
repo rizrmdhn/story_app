@@ -147,7 +147,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
       isUnknown = false;
       selectedStoryId = configuration.storyId.toString();
     } else {
-      print('Unknown route');
+      throw Exception('Unknown route');
     }
 
     notifyListeners();

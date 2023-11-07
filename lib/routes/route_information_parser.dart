@@ -39,17 +39,17 @@ class MyRouteInformationParser
   @override
   RouteInformation? restoreRouteInformation(PageConfiguration configuration) {
     if (configuration.isUnknownPage) {
-      return const RouteInformation(location: '/unknown');
+      return RouteInformation(uri: Uri.parse('/unknown'));
     } else if (configuration.isSplashPage) {
-      return const RouteInformation(location: '/splash');
+      return RouteInformation(uri: Uri.parse('/splash'));
     } else if (configuration.isLoginPage) {
-      return const RouteInformation(location: '/login');
+      return RouteInformation(uri: Uri.parse('/login'));
     } else if (configuration.isRegisterPage) {
-      return const RouteInformation(location: '/register');
+      return RouteInformation(uri: Uri.parse('/register'));
     } else if (configuration.isStoryPage) {
-      return const RouteInformation(location: '/story');
+      return RouteInformation(uri: Uri.parse('/story'));
     } else if (configuration.isAddStoryPage) {
-      return const RouteInformation(location: '/story/add');
+      return RouteInformation(uri: Uri.parse('/story/add'));
     } else {
       return null;
     }

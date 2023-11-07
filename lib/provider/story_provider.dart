@@ -192,18 +192,4 @@ class StoryProvider extends ChangeNotifier {
       return;
     }
   }
-
-  void onCustomCameraView() async {
-    final isMacOS = defaultTargetPlatform == TargetPlatform.macOS;
-    final isLinux = defaultTargetPlatform == TargetPlatform.linux;
-    if (isMacOS || isLinux) {
-      // throw alert error
-
-      return;
-    }
-
-    // TODO : implement custom camera view and custom view for camera
-
-    try {} catch (e) {}
-  }
 }
