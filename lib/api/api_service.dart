@@ -120,8 +120,9 @@ class ApiService {
     }
   }
 
-  Future<GetAllStoriesResponse> getAllStories(String? userToken) async {
-    var url = '$baseUrl/stories';
+  Future<GetAllStoriesResponse> getAllStories(
+      String? userToken, int pageItems, int sizeItem) async {
+    var url = '$baseUrl/stories?page=$pageItems&size=$sizeItem';
     var headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $userToken'

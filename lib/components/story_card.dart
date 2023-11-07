@@ -8,7 +8,6 @@ class StoryCard extends StatelessWidget {
   final String description;
   final String photoUrl;
   final DateTime createdAt;
-
   final Function onTapped;
 
   const StoryCard({

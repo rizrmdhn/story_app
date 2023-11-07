@@ -12,6 +12,8 @@ class StoryProvider extends ChangeNotifier {
 
   List<Story> _stories = [];
   late DetailStory _detailStory;
+  int? pageItems = 1;
+  int sizeItems = 12;
   XFile? _image;
   String? _imagePath;
   bool _isLoggingIn = false;
@@ -75,11 +77,18 @@ class StoryProvider extends ChangeNotifier {
   Future<List<Story>> getAllStories() async {
     setIsFetching(true);
     final userToken = await _preferences.getUserToken();
-    final response = await _apiService.getAllStories(userToken);
+    final response =
+        await _apiService.getAllStories(userToken, pageItems!, sizeItems);
 
     if (response.error == false) {
+      if (response.listStory.length < sizeItems) {
+        pageItems = null;
+      } else {
+        pageItems = pageItems! + 1;
+      }
+      notifyListeners();
       setIsFetching(false);
-      _stories = response.listStory;
+      _stories.addAll(response.listStory);
       notifyListeners();
       return _stories;
     }
