@@ -3,6 +3,7 @@
   "@tittleApp": {
     "description": "Story App sebuah aplikasi untuk menulis cerita pendek dan berbagi cerita pendek"
   },
+  "locationLabel": "Lokasi",
   "addStory": "Tambah Cerita",
   "gallery": "Galeri",
   "camera": "Kamera",
