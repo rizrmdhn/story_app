@@ -10,7 +10,7 @@ class StoryProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
   final Preferences _preferences = Preferences();
 
-  List<Story> _stories = [];
+  final List<Story> _stories = [];
   late DetailStory _detailStory;
   int? pageItems = 1;
   int sizeItems = 12;
@@ -27,8 +27,6 @@ class StoryProvider extends ChangeNotifier {
   bool get isFetching => _isFetching;
 
   StoryProvider() {
-    initDetailStory();
-    getAllStories();
     sortStories();
   }
 
@@ -89,6 +87,7 @@ class StoryProvider extends ChangeNotifier {
       notifyListeners();
       setIsFetching(false);
       _stories.addAll(response.listStory);
+      sortStories();
       notifyListeners();
       return _stories;
     }
@@ -137,9 +136,11 @@ class StoryProvider extends ChangeNotifier {
     );
 
     if (response.error == false) {
-      notifyListeners();
-      sortStories();
+      // this is for refresh the list then fetch new data
+      _stories.clear();
+      pageItems = 1;
       getAllStories();
+      notifyListeners();
       setIsFetching(false);
       return AddNewStoryRepsonse.success();
     }

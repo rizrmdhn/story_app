@@ -1,6 +1,9 @@
-import 'dart:convert';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:story_app/model/response/error_response.dart';
 
+part 'add_new_story_response.g.dart';
+
+@JsonSerializable()
 class AddNewStoryRepsonse {
   bool error;
   String message;
@@ -10,19 +13,16 @@ class AddNewStoryRepsonse {
     required this.message,
   });
 
-  factory AddNewStoryRepsonse.fromRawJson(String str) =>
-      AddNewStoryRepsonse.fromJson(json.decode(str));
+  factory AddNewStoryRepsonse.fromRawJson(Map<String, dynamic> json) =>
+      _$AddNewStoryRepsonseFromJson(json);
 
-  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toRawJson() => _$AddNewStoryRepsonseToJson(this);
 
   factory AddNewStoryRepsonse.fromJson(Map<String, dynamic> json) {
     if (json['error'] == true) {
       throw ErrorResponse.fromJson(json);
     } else {
-      return AddNewStoryRepsonse(
-        error: json["error"],
-        message: json["message"],
-      );
+      return _$AddNewStoryRepsonseFromJson(json);
     }
   }
 
@@ -36,8 +36,5 @@ class AddNewStoryRepsonse {
         message: 'Success',
       );
 
-  Map<String, dynamic> toJson() => {
-        "error": error,
-        "message": message,
-      };
+  Map<String, dynamic> toJson() => _$AddNewStoryRepsonseToJson(this);
 }

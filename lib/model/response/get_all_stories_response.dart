@@ -1,7 +1,10 @@
-import 'dart:convert';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:story_app/model/response/error_response.dart';
 import 'package:story_app/model/story.dart';
 
+part 'get_all_stories_response.g.dart';
+
+@JsonSerializable()
 class GetAllStoriesResponse {
   bool error;
   String message;
@@ -13,24 +16,16 @@ class GetAllStoriesResponse {
     required this.listStory,
   });
 
-  factory GetAllStoriesResponse.fromRawJson(String str) =>
-      GetAllStoriesResponse.fromJson(json.decode(str));
+  factory GetAllStoriesResponse.fromRawJson(Map<String, dynamic> json) =>
+      _$GetAllStoriesResponseFromJson(json);
 
-  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toRawJson() => _$GetAllStoriesResponseToJson(this);
 
   factory GetAllStoriesResponse.fromJson(Map<String, dynamic> json) {
     if (json['error'] == true) {
       throw ErrorResponse.fromJson(json).getErrorMessage();
     } else {
-      return GetAllStoriesResponse(
-        error: json["error"],
-        message: json["message"],
-        listStory: List<Story>.from(
-          json["listStory"].map(
-            (x) => Story.fromJson(x),
-          ),
-        ),
-      );
+      return _$GetAllStoriesResponseFromJson(json);
     }
   }
 
@@ -48,13 +43,5 @@ class GetAllStoriesResponse {
         listStory: listStory,
       );
 
-  Map<String, dynamic> toJson() => {
-        "error": error,
-        "message": message,
-        "listStory": List<dynamic>.from(
-          listStory.map(
-            (x) => x.toJson(),
-          ),
-        ),
-      };
+  Map<String, dynamic> toJson() => _$GetAllStoriesResponseToJson(this);
 }

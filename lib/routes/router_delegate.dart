@@ -6,6 +6,7 @@ import 'package:story_app/model/page_configuration.dart';
 import 'package:story_app/provider/auth_provider.dart';
 import 'package:story_app/provider/connectivity_provider.dart';
 import 'package:story_app/provider/localization_provider.dart';
+import 'package:story_app/provider/story_provider.dart';
 import 'package:story_app/screens/add_story_screen.dart';
 import 'package:story_app/screens/detail_story_screen.dart';
 import 'package:story_app/screens/login_screen.dart';
@@ -23,6 +24,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   final Preferences preferences = Preferences();
   final LocalizationProvider localizationProvider = LocalizationProvider();
   final ConnectivityProvider connectivityProvider = ConnectivityProvider();
+  final StoryProvider storyProvider = StoryProvider();
 
   MyRouteDelegate(
     this.database,
@@ -214,7 +216,8 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                     AppLocalizations.of(navigatorKey.currentContext!)!
                         .loginSuccess;
               }
-
+              storyProvider.initDetailStory();
+              await storyProvider.getAllStories();
               isLoggedIn = authProvider.userToken != null;
               notifyListeners();
             },

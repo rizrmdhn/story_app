@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:story_app/model/response/login_response.dart';
+import 'package:story_app/model/response/login_result.dart';
 
 class Preferences {
   final String stateKey = 'state';

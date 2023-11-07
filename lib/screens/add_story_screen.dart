@@ -285,8 +285,6 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                               response.message,
                                             );
                                           }
-
-                                          await storyProvider.getAllStories();
                                         },
                                         child: Text(
                                           AppLocalizations.of(context)!.upload,

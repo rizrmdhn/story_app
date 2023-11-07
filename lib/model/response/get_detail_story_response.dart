@@ -1,7 +1,10 @@
-import 'dart:convert';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:story_app/model/detail_story.dart';
 import 'package:story_app/model/response/error_response.dart';
 
+part 'get_detail_story_response.g.dart';
+
+@JsonSerializable()
 class GetDetailStoryRepsonse {
   bool error;
   String message;
@@ -13,20 +16,16 @@ class GetDetailStoryRepsonse {
     required this.story,
   });
 
-  factory GetDetailStoryRepsonse.fromRawJson(String str) =>
-      GetDetailStoryRepsonse.fromJson(json.decode(str));
+  factory GetDetailStoryRepsonse.fromRawJson(Map<String, dynamic> json) =>
+      _$GetDetailStoryRepsonseFromJson(json);
 
-  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toRawJson() => _$GetDetailStoryRepsonseToJson(this);
 
   factory GetDetailStoryRepsonse.fromJson(Map<String, dynamic> json) {
     if (json['error'] == true) {
       throw ErrorResponse.fromJson(json).getErrorMessage();
     } else {
-      return GetDetailStoryRepsonse(
-        error: json["error"],
-        message: json["message"],
-        story: DetailStory.fromJson(json["story"]),
-      );
+      return _$GetDetailStoryRepsonseFromJson(json);
     }
   }
 
@@ -50,9 +49,5 @@ class GetDetailStoryRepsonse {
         story: story,
       );
 
-  Map<String, dynamic> toJson() => {
-        "error": error,
-        "message": message,
-        "story": story.toJson(),
-      };
+  Map<String, dynamic> toJson() => _$GetDetailStoryRepsonseToJson(this);
 }

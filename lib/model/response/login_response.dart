@@ -1,7 +1,10 @@
-import 'dart:convert';
-
+import 'package:json_annotation/json_annotation.dart';
 import 'package:story_app/model/response/error_response.dart';
+import 'package:story_app/model/response/login_result.dart';
 
+part 'login_response.g.dart';
+
+@JsonSerializable()
 class LoginResponse {
   bool error;
   String message;
@@ -13,41 +16,37 @@ class LoginResponse {
     required this.loginResult,
   });
 
-  factory LoginResponse.fromRawJson(String str) =>
-      LoginResponse.fromJson(json.decode(str));
+  factory LoginResponse.fromRawJson(Map<String, dynamic> json) =>
+      _$LoginResponseFromJson(json);
 
-  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toRawJson() => _$LoginResponseToJson(this);
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     try {
       if (json['error'] == true) {
         final errorResponse = ErrorResponse.fromJson(json);
-        return LoginResponse(
-          error: true,
-          message: errorResponse.getErrorMessage(),
-          loginResult: LoginResult(
-            userId: '',
-            name: '',
-            token: '',
-          ),
-        );
+        return _$LoginResponseFromJson({
+          'error': errorResponse.error,
+          'message': errorResponse.message,
+          'loginResult': {
+            'userId': '',
+            'name': '',
+            'token': '',
+          }
+        });
       } else {
-        return LoginResponse(
-          error: json["error"],
-          message: json["message"],
-          loginResult: LoginResult.fromJson(json["loginResult"]),
-        );
+        return _$LoginResponseFromJson(json);
       }
     } catch (e) {
-      return LoginResponse(
-        error: true,
-        message: 'Error parsing response',
-        loginResult: LoginResult(
-          userId: '',
-          name: '',
-          token: '',
-        ), // Or handle this based on your use case
-      );
+      return _$LoginResponseFromJson({
+        'error': true,
+        'message': 'Parse error',
+        'loginResult': {
+          'userId': '',
+          'name': '',
+          'token': '',
+        }
+      });
     }
   }
 
@@ -67,38 +66,5 @@ class LoginResponse {
         loginResult: loginResult,
       );
 
-  Map<String, dynamic> toJson() => {
-        "error": error,
-        "message": message,
-        "loginResult": loginResult.toJson(),
-      };
-}
-
-class LoginResult {
-  String userId;
-  String name;
-  String token;
-
-  LoginResult({
-    required this.userId,
-    required this.name,
-    required this.token,
-  });
-
-  factory LoginResult.fromRawJson(String str) =>
-      LoginResult.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory LoginResult.fromJson(Map<String, dynamic> json) => LoginResult(
-        userId: json["userId"],
-        name: json["name"],
-        token: json["token"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "userId": userId,
-        "name": name,
-        "token": token,
-      };
+  Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
 }

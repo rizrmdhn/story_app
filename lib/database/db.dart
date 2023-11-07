@@ -1,5 +1,5 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:story_app/model/response/login_response.dart';
+import 'package:story_app/model/response/login_result.dart';
 
 class DatabaseRepository {
   late Database _database;

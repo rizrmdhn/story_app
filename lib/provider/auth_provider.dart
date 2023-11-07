@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:story_app/api/api_service.dart';
 import 'package:story_app/database/preferences.dart';
 import 'package:story_app/model/response/login_response.dart';
+import 'package:story_app/model/response/login_result.dart';
 import 'package:story_app/model/response/logout_response.dart';
 import 'package:story_app/model/response/register_response.dart';
 
