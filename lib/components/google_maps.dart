@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:provider/provider.dart';
 import 'package:story_app/components/placemark.dart';
+import 'package:story_app/model/response/error_response.dart';
+import 'package:story_app/provider/map_provider.dart';
 
 class MyGoogleMaps extends StatefulWidget {
   const MyGoogleMaps({Key? key}) : super(key: key);
@@ -30,8 +33,7 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
       serviceEnabled = await location.requestService();
 
       if (!serviceEnabled) {
-        print('Service location disabled');
-        return;
+        throw ErrorResponse(error: true, message: 'Service location disabled');
       }
     }
 
@@ -41,8 +43,7 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
       permissionGranted = await location.requestPermission();
 
       if (permissionGranted != PermissionStatus.granted) {
-        print('Permission location denied');
-        return;
+        throw ErrorResponse(error: true, message: 'Permission location denied');
       }
     }
 
@@ -105,88 +106,89 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          GoogleMap(
-            myLocationEnabled: true,
-            mapType: selectedMapType,
-            markers: markers,
-            initialCameraPosition: CameraPosition(
-              target: dicodingOffice,
-              zoom: 18,
-            ),
-            onLongPress: (LatLng latLng) {
-              onLongPressGoogleMap(latLng);
-            },
-            onMapCreated: (controller) async {
-              final marker = Marker(
-                markerId: const MarkerId("source"),
-                position: dicodingOffice,
-              );
-
-              setState(() {
-                mapController = controller;
-                markers.add(marker);
-              });
-            },
-          ),
-          Positioned(
-            top: 16,
-            right: 16,
-            child: FloatingActionButton(
-              child: const Icon(Icons.my_location),
-              onPressed: () {
-                onMyLocationButtonPress();
-              },
-            ),
-          ),
-          Positioned(
-            top: 16,
-            right: 80,
-            child: FloatingActionButton.small(
-              onPressed: null,
-              child: PopupMenuButton<MapType>(
-                icon: const Icon(Icons.map),
-                onSelected: (value) {
-                  setState(() {
-                    selectedMapType = value;
-                  });
+    return Consumer<MapProvider>(
+      builder: (context, mapProvider, child) {
+        return Scaffold(
+          body: Stack(
+            children: [
+              GoogleMap(
+                myLocationEnabled: true,
+                mapType: mapProvider.selectedMapType,
+                markers: mapProvider.markers,
+                initialCameraPosition: CameraPosition(
+                  target: dicodingOffice,
+                  zoom: 18,
+                ),
+                onLongPress: (LatLng latLng) {
+                  mapProvider.onLongPressGoogleMaps(latLng, mapController);
                 },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: MapType.normal,
-                    child: Text("Normal"),
-                  ),
-                  const PopupMenuItem(
-                    value: MapType.satellite,
-                    child: Text("Satellite"),
-                  ),
-                  const PopupMenuItem(
-                    value: MapType.terrain,
-                    child: Text("Terrain"),
-                  ),
-                  const PopupMenuItem(
-                    value: MapType.hybrid,
-                    child: Text("Hybrid"),
-                  ),
-                ],
+                onMapCreated: (controller) async {
+                  final marker = Marker(
+                    markerId: const MarkerId("source"),
+                    position: dicodingOffice,
+                  );
+
+                  mapProvider.addMarker(marker);
+
+                  mapController = controller;
+                },
               ),
-            ),
+              Positioned(
+                top: 16,
+                right: 16,
+                child: FloatingActionButton(
+                  child: const Icon(Icons.my_location),
+                  onPressed: () {
+                    mapProvider.onGetMyLocation(mapController);
+                  },
+                ),
+              ),
+              Positioned(
+                top: 16,
+                right: 80,
+                child: FloatingActionButton.small(
+                  onPressed: null,
+                  child: PopupMenuButton<MapType>(
+                    icon: const Icon(Icons.map),
+                    onSelected: (value) {
+                      mapProvider.changeMapType(value);
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: MapType.normal,
+                        child: Text("Normal"),
+                      ),
+                      const PopupMenuItem(
+                        value: MapType.satellite,
+                        child: Text("Satellite"),
+                      ),
+                      const PopupMenuItem(
+                        value: MapType.terrain,
+                        child: Text("Terrain"),
+                      ),
+                      const PopupMenuItem(
+                        value: MapType.hybrid,
+                        child: Text("Hybrid"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (mapProvider.placemark == null)
+                const SizedBox()
+              else
+                Positioned(
+                  bottom: 16,
+                  right: 16,
+                  left: 16,
+                  child: Placemark(
+                    placemark: mapProvider.placemark!,
+                  ),
+                ),
+            ],
           ),
-          if (placemark == null)
-            const SizedBox()
-          else
-            Positioned(
-              bottom: 16,
-              right: 16,
-              left: 16,
-              child: Placemark(
-                placemark: placemark!,
-              ),
-            ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

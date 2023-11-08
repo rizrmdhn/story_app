@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app/components/google_maps.dart';
 import 'package:story_app/components/my_app_bar.dart';
 import 'package:story_app/localization/main.dart';
 import 'package:story_app/provider/localization_provider.dart';
@@ -291,6 +292,31 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                         ),
                                       ),
                                     )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20.0),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // location
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  AppLocalizations.of(context)!.locationLabel,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              // google maps
+                              const SizedBox(
+                                height: 400,
+                                child: MyGoogleMaps(),
+                              ),
                             ],
                           ),
                         ),
