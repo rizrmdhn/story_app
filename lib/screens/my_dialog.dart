@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/provider/auth_provider.dart';
+import 'package:story_app/provider/story_provider.dart';
 
 class MyDialog extends Page {
   final String title;
@@ -27,6 +28,7 @@ class MyDialog extends Page {
               TextButton(
                 onPressed: () {
                   context.read<AuthProvider>().setIsFetching(false);
+                  context.read<StoryProvider>().setIsFetching(false);
                   Navigator.of(context).pop();
                 },
                 child: const Text('OK'),

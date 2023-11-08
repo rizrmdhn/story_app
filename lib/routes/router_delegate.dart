@@ -7,6 +7,7 @@ import 'package:story_app/model/response/error_response.dart';
 import 'package:story_app/provider/auth_provider.dart';
 import 'package:story_app/provider/connectivity_provider.dart';
 import 'package:story_app/provider/localization_provider.dart';
+import 'package:story_app/provider/map_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
 import 'package:story_app/screens/add_story_screen.dart';
 import 'package:story_app/screens/detail_story_screen.dart';
@@ -26,6 +27,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   final LocalizationProvider localizationProvider = LocalizationProvider();
   final ConnectivityProvider connectivityProvider = ConnectivityProvider();
   final StoryProvider storyProvider = StoryProvider();
+  final MapProvider mapProvider = MapProvider();
 
   MyRouteDelegate(
     this.database,
@@ -52,6 +54,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   bool? isUnknown;
   bool? isLoggedIn;
   bool? addStory;
+  bool? addStoryError;
   bool? noConnection;
   bool isRegister = false;
   String? selectedStoryId;
@@ -109,6 +112,16 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
 
         if (notificationMessage != null &&
             notificationTitle != null &&
+            addStory == true &&
+            addStoryError == true) {
+          notificationMessage = null;
+          notificationTitle = null;
+          notifyListeners();
+          return true;
+        }
+
+        if (notificationMessage != null &&
+            notificationTitle != null &&
             addStory == true) {
           notificationMessage = null;
           notificationTitle = null;
@@ -130,6 +143,13 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
         if (notificationMessage != null && notificationTitle != null) {
           notificationMessage = null;
           notificationTitle = null;
+          notifyListeners();
+          return true;
+        }
+
+        if (selectedStoryId != null) {
+          selectedStoryId = null;
+          mapProvider.clearMarkerAndPlacemark();
           notifyListeners();
           return true;
         }
@@ -346,6 +366,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                       AppLocalizations.of(navigatorKey.currentContext!)!
                           .addStoryFailed;
                   notificationMessage = message;
+                  addStoryError = true;
                   notifyListeners();
                   return;
                 } else if (error == false) {

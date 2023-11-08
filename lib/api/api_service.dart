@@ -73,6 +73,10 @@ class ApiService {
       'Authorization': 'Bearer $userToken'
     };
 
+    if (description.isEmpty) {
+      return AddNewStoryRepsonse.failure('description cannot be empty');
+    }
+
     Map<String, String> body = {
       'description': description,
       'lat': lat.toString(),
@@ -96,7 +100,7 @@ class ApiService {
 
       return AddNewStoryRepsonse.fromJson(jsonDecode(responseData));
     } catch (e) {
-      throw AddNewStoryRepsonse.failure(e.toString());
+      return AddNewStoryRepsonse.failure('Error could not upload story');
     }
   }
 

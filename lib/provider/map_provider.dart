@@ -26,6 +26,12 @@ class MapProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearMarkerAndPlacemark() {
+    _markers.clear();
+    _placemark = null;
+    notifyListeners();
+  }
+
   Future<ErrorResponse> setUserLatLng(LatLng latLng) async {
     _userLocation = latLng;
     notifyListeners();
