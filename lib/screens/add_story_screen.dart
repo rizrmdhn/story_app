@@ -68,7 +68,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           children: [
                             // image placeholder preview
                             SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.9,
+                              height: MediaQuery.of(context).size.height * 0.4,
                               child: Center(
                                 child: storyProvider.imagePath == null
                                     ? const Icon(Icons.image, size: 100.0)
@@ -107,6 +107,23 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                   ),
                                 ),
                               ],
+                            ),
+                            const SizedBox(height: 20.0),
+                            // location
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              child: Text(
+                                AppLocalizations.of(context)!.locationLabel,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            // google maps
+                            const SizedBox(
+                              height: 400,
+                              child: MyGoogleMaps(),
                             ),
                             const SizedBox(height: 20.0),
                             // the form
@@ -242,6 +259,23 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           ],
                         ),
                         const SizedBox(height: 20.0),
+                        // location
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            AppLocalizations.of(context)!.locationLabel,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        // google maps
+                        const SizedBox(
+                          height: 400,
+                          child: MyGoogleMaps(),
+                        ),
+                        const SizedBox(height: 20.0),
                         // the form
                         Form(
                           child: Column(
@@ -292,31 +326,6 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                         ),
                                       ),
                                     )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 20.0),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // location
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                  AppLocalizations.of(context)!.locationLabel,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              // google maps
-                              const SizedBox(
-                                height: 400,
-                                child: MyGoogleMaps(),
-                              ),
                             ],
                           ),
                         ),

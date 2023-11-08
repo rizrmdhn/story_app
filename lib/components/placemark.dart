@@ -7,18 +7,19 @@ class Placemark extends StatelessWidget {
     required this.placemark,
   });
 
-  /// todo-05-02: create a variable
   final geo.Placemark placemark;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      /// todo-05-03: show the information
-      padding: const EdgeInsets.all(16),
-      constraints: const BoxConstraints(maxWidth: 700),
+      padding: const EdgeInsets.only(
+        top: 16,
+        right: 5,
+        left: 16,
+        bottom: 16,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(50)),
         boxShadow: <BoxShadow>[
           BoxShadow(
             blurRadius: 20,

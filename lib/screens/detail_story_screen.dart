@@ -22,7 +22,7 @@ class DetailStoryScreen extends StatelessWidget {
           : Material(
               child: Scaffold(
                 appBar: MyAppBar(
-                  title: AppLocalizations.of(context)!.addStory,
+                  title: AppLocalizations.of(context)!.detailStory,
                   needChangeLanguageButton: true,
                   changeLanguageButtonOnPressed: () => {
                     localizationProvider.setLocale(

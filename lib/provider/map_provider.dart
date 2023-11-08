@@ -5,19 +5,40 @@ import 'package:location/location.dart';
 import 'package:story_app/model/response/error_response.dart';
 
 class MapProvider extends ChangeNotifier {
+  late LatLng _userLocation;
   final Set<Marker> _markers = {};
   MapType _selectedMapType = MapType.normal;
   geo.Placemark? _placemark;
+  final Location location = Location();
 
+  LatLng? get userLocation => _userLocation;
   Set<Marker> get markers => _markers;
   MapType get selectedMapType => _selectedMapType;
   geo.Placemark? get placemark => _placemark;
 
-  void onGetMyLocation(GoogleMapController mapController) async {
-    final Location location = Location();
+  MapProvider() {
+    initLatLng();
+    initUserLocation();
+  }
+
+  void initLatLng() {
+    _userLocation = const LatLng(-6.1753924, 106.8271528);
+    notifyListeners();
+  }
+
+  void initUserLocation() async {
+    locationServiceChecker();
+    late LocationData locationData;
+
+    locationData = await location.getLocation();
+    final latLng = LatLng(locationData.latitude!, locationData.longitude!);
+    _userLocation = latLng;
+    notifyListeners();
+  }
+
+  void locationServiceChecker() async {
     late bool serviceEnabled;
     late PermissionStatus permissionGranted;
-    late LocationData locationData;
 
     serviceEnabled = await location.serviceEnabled();
 
@@ -38,6 +59,11 @@ class MapProvider extends ChangeNotifier {
         throw ErrorResponse(error: true, message: 'Permission location denied');
       }
     }
+  }
+
+  void onGetMyLocation(GoogleMapController mapController) async {
+    locationServiceChecker();
+    late LocationData locationData;
 
     locationData = await location.getLocation();
 
