@@ -6,6 +6,7 @@ import 'package:story_app/components/google_maps.dart';
 import 'package:story_app/components/my_app_bar.dart';
 import 'package:story_app/localization/main.dart';
 import 'package:story_app/provider/localization_provider.dart';
+import 'package:story_app/provider/map_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
 
 class AddStoryScreen extends StatefulWidget {
@@ -33,8 +34,9 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<StoryProvider, LocalizationProvider>(
-      builder: (context, storyProvider, localizationProvider, child) {
+    return Consumer3<StoryProvider, LocalizationProvider, MapProvider>(
+      builder:
+          (context, storyProvider, localizationProvider, mapProvider, child) {
         return OrientationBuilder(
           builder: (context, orientation) {
             if (orientation == Orientation.landscape) {
@@ -158,6 +160,10 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                                 _contentController.text,
                                                 AppLocalizations.of(context)!
                                                     .imageNotFound,
+                                                mapProvider
+                                                    .userLocation!.latitude,
+                                                mapProvider
+                                                    .userLocation!.longitude,
                                               );
 
                                               if (response.error == true) {
@@ -306,6 +312,8 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                             _contentController.text,
                                             AppLocalizations.of(context)!
                                                 .imageNotFound,
+                                            mapProvider.userLocation!.latitude,
+                                            mapProvider.userLocation!.longitude,
                                           );
 
                                           if (response.error == true) {

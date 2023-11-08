@@ -45,5 +45,6 @@
   "imageNotFound": "Gambar tidak ditemukan",
   "networkError": "Koneksi bermasalah",
   "networkErrorMessage": "Tolong periksa koneksi internet Anda",
-  "serverError": "Server bermasalah"
+  "serverError": "Server bermasalah",
+  "locationError": "Lokasi tidak ditemukan"
 }

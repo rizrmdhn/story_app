@@ -3,6 +3,7 @@ import 'package:story_app/database/db.dart';
 import 'package:story_app/database/preferences.dart';
 import 'package:story_app/localization/main.dart';
 import 'package:story_app/model/page_configuration.dart';
+import 'package:story_app/model/response/error_response.dart';
 import 'package:story_app/provider/auth_provider.dart';
 import 'package:story_app/provider/connectivity_provider.dart';
 import 'package:story_app/provider/localization_provider.dart';
@@ -57,6 +58,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
   String? notificationTitle;
   String? notificationMessage;
   String? networkStatus;
+  String? locationStatus;
 
   List<Page> historyStack = [];
 
@@ -91,6 +93,16 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
             notificationTitle = null;
             notifyListeners();
           }
+          notifyListeners();
+          return true;
+        }
+
+        if (notificationMessage != null &&
+            notificationTitle != null &&
+            locationStatus != null) {
+          notificationMessage = null;
+          notificationTitle = null;
+          locationStatus = null;
           notifyListeners();
           return true;
         }
@@ -284,6 +296,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                     AppLocalizations.of(navigatorKey.currentContext!)!
                         .logoutFailed;
                 notificationMessage = response.message;
+                locationStatus = response.message;
                 notifyListeners();
                 return;
               } else if (response.error == false) {
@@ -296,9 +309,19 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
               isLoggedIn = false;
               notifyListeners();
             },
-            onTapped: (String id) async {
-              selectedStoryId = id;
-              notifyListeners();
+            onTapped: (String id, ErrorResponse response) async {
+              if (response.error == true) {
+                notificationTitle =
+                    AppLocalizations.of(navigatorKey.currentContext!)!
+                        .locationError;
+                notificationMessage = response.message;
+                selectedStoryId = id;
+                notifyListeners();
+                return;
+              } else if (response.error == false) {
+                selectedStoryId = id;
+                notifyListeners();
+              }
             },
             onAddStoryButtonPressed: () async {
               addStory = true;

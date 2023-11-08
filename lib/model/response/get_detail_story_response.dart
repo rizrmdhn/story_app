@@ -39,6 +39,8 @@ class GetDetailStoryRepsonse {
           createdAt: DateTime.now(),
           name: '',
           photoUrl: '',
+          lat: 0,
+          lon: 0,
         ),
       );
 

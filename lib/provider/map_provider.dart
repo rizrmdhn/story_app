@@ -26,6 +26,31 @@ class MapProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<ErrorResponse> setUserLatLng(LatLng latLng) async {
+    _userLocation = latLng;
+    notifyListeners();
+
+    try {
+      final info = await geo.placemarkFromCoordinates(
+        _userLocation.latitude,
+        _userLocation.longitude,
+      );
+      final place = info[0];
+      final street = place.street!;
+      final address =
+          '${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+
+      _placemark = place;
+      notifyListeners();
+
+      defineMarker(latLng, street, address);
+
+      return ErrorResponse(error: false, message: 'success');
+    } catch (e) {
+      return ErrorResponse(error: true, message: e.toString());
+    }
+  }
+
   void initUserLocation() async {
     locationServiceChecker();
     late LocationData locationData;

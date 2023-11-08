@@ -12,6 +12,8 @@ DetailStory _$DetailStoryFromJson(Map<String, dynamic> json) => DetailStory(
       description: json['description'] as String,
       photoUrl: json['photoUrl'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      lat: (json['lat'] as num).toDouble(),
+      lon: (json['lon'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$DetailStoryToJson(DetailStory instance) =>
@@ -21,4 +23,6 @@ Map<String, dynamic> _$DetailStoryToJson(DetailStory instance) =>
       'description': instance.description,
       'photoUrl': instance.photoUrl,
       'createdAt': instance.createdAt.toIso8601String(),
+      'lat': instance.lat,
+      'lon': instance.lon,
     };

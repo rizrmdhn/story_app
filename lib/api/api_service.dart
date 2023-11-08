@@ -61,6 +61,8 @@ class ApiService {
     List<int> bytes,
     String fileName,
     String userToken,
+    double lat,
+    double lon,
   ) async {
     var url = '$baseUrl/stories';
     http.MultipartRequest request =
@@ -73,6 +75,8 @@ class ApiService {
 
     Map<String, String> body = {
       'description': description,
+      'lat': lat.toString(),
+      'lon': lon.toString(),
     };
 
     final multiPartFile = http.MultipartFile.fromBytes(
@@ -121,8 +125,11 @@ class ApiService {
   }
 
   Future<GetAllStoriesResponse> getAllStories(
-      String? userToken, int pageItems, int sizeItem) async {
-    var url = '$baseUrl/stories?page=$pageItems&size=$sizeItem';
+    String? userToken,
+    int pageItems,
+    int sizeItem,
+  ) async {
+    var url = '$baseUrl/stories?page=$pageItems&size=$sizeItem&location=1';
     var headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $userToken'

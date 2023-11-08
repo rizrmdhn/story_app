@@ -27,6 +27,7 @@ class StoryProvider extends ChangeNotifier {
   bool get isFetching => _isFetching;
 
   StoryProvider() {
+    initDetailStory();
     sortStories();
   }
 
@@ -52,6 +53,8 @@ class StoryProvider extends ChangeNotifier {
       description: '',
       photoUrl: 'abc',
       createdAt: DateTime.now(),
+      lat: 0,
+      lon: 0,
     );
     notifyListeners();
   }
@@ -115,6 +118,8 @@ class StoryProvider extends ChangeNotifier {
   Future<AddNewStoryRepsonse> addNewStory(
     String description,
     String errorMesssage,
+    double lat,
+    double lon,
   ) async {
     setIsFetching(true);
     final userToken = await _preferences.getUserToken();
@@ -133,6 +138,8 @@ class StoryProvider extends ChangeNotifier {
       bytes,
       fileName,
       userToken!,
+      lat,
+      lon,
     );
 
     if (response.error == false) {

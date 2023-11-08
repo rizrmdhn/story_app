@@ -9,6 +9,8 @@ class DetailStory {
   String description;
   String photoUrl;
   DateTime createdAt;
+  double lat;
+  double lon;
 
   DetailStory({
     required this.id,
@@ -16,6 +18,8 @@ class DetailStory {
     required this.description,
     required this.photoUrl,
     required this.createdAt,
+    required this.lat,
+    required this.lon,
   });
 
   factory DetailStory.fromJson(

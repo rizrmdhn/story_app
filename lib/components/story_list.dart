@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/components/story_card.dart';
 import 'package:story_app/model/story.dart';
+import 'package:story_app/provider/map_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
 
 class StoryList extends StatefulWidget {
@@ -45,8 +47,8 @@ class _StoryListState extends State<StoryList> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StoryProvider>(
-      builder: (context, storyProvider, child) {
+    return Consumer2<StoryProvider, MapProvider>(
+      builder: (context, storyProvider, mapProvider, child) {
         if (storyProvider.isFetching == true && storyProvider.pageItems == 1) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -79,7 +81,24 @@ class _StoryListState extends State<StoryList> {
                   description: story.description,
                   photoUrl: story.photoUrl,
                   createdAt: story.createdAt,
-                  onTapped: () => widget.onTapped(story.id),
+                  lat: story.lat,
+                  lon: story.lon,
+                  onTapped: () async {
+                    var userLatLng = LatLng(
+                      story.lat,
+                      story.lon,
+                    );
+                    context.read<StoryProvider>().getDetailStories(story.id);
+                    var response = await context
+                        .read<MapProvider>()
+                        .setUserLatLng(userLatLng);
+
+                    if (response.error == true) {
+                      widget.onTapped(story.id, response);
+                    } else {
+                      widget.onTapped(story.id, response);
+                    }
+                  },
                 ),
               );
             },
