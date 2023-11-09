@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:story_app/components/custom_loading.dart';
 import 'package:story_app/components/google_maps.dart';
 import 'package:story_app/components/my_app_bar.dart';
 import 'package:story_app/localization/main.dart';
 import 'package:story_app/provider/localization_provider.dart';
 import 'package:story_app/provider/story_provider.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'dart:math' as math;
 
-class DetailStoryScreen extends StatelessWidget {
+class DetailStoryScreen extends StatefulWidget {
   final String storyId;
 
   const DetailStoryScreen({
@@ -16,10 +18,56 @@ class DetailStoryScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<DetailStoryScreen> createState() => _DetailStoryScreenState();
+}
+
+class _DetailStoryScreenState extends State<DetailStoryScreen>
+    with TickerProviderStateMixin {
+  late AnimationController loaderController;
+  late Animation<double> loaderAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    loaderController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+    loaderAnimation = Tween(begin: 1.0, end: 1.4).animate(CurvedAnimation(
+      parent: loaderController,
+      curve: Curves.easeIn,
+    ));
+    loaderController.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    loaderController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer2<StoryProvider, LocalizationProvider>(
       builder: (context, value, localizationProvider, child) => value.isFetching
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: AnimatedBuilder(
+                animation: loaderController,
+                builder: (context, child) {
+                  return Transform.rotate(
+                    angle: loaderController.status == AnimationStatus.forward
+                        ? (math.pi * 2) * loaderController.value
+                        : -(math.pi * 2) * loaderController.value,
+                    child: CustomPaint(
+                      foregroundPainter: LoaderAnimation(
+                        radiusRatio: loaderAnimation.value,
+                      ),
+                      size: const Size(300, 300),
+                    ),
+                  );
+                },
+              ),
+            )
           : Material(
               child: Scaffold(
                 appBar: MyAppBar(

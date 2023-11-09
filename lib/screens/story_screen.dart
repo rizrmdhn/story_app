@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_app/components/my_app_bar.dart';
 import 'package:story_app/components/story_list.dart';
+import 'package:story_app/flavor_config.dart';
 import 'package:story_app/provider/story_provider.dart';
 
 class StoryScreen extends StatelessWidget {
@@ -24,7 +25,7 @@ class StoryScreen extends StatelessWidget {
       builder: (context, storyProvider, child) {
         return Scaffold(
           appBar: MyAppBar(
-            title: 'Story',
+            title: FlavorConfig.instance.values.titleApp,
             needLogoutButton: true,
             logoutButtonOnPressed: () => logoutButtonOnPressed(),
           ),

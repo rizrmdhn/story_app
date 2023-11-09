@@ -15,6 +15,12 @@ class _GoogleMapsState extends State<MyGoogleMaps> {
   late GoogleMapController mapController;
 
   @override
+  void dispose() {
+    mapController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<MapProvider>(
       builder: (context, mapProvider, child) {

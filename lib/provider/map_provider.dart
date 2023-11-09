@@ -53,7 +53,10 @@ class MapProvider extends ChangeNotifier {
 
       return ErrorResponse(error: false, message: 'success');
     } catch (e) {
-      return ErrorResponse(error: true, message: e.toString());
+      return ErrorResponse(
+        error: true,
+        message: 'error location coordinate could not be found',
+      );
     }
   }
 
