@@ -6,6 +6,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function? logoutButtonOnPressed;
   final bool? needChangeLanguageButton;
   final Function? changeLanguageButtonOnPressed;
+  final bool? needStoryWithLocationButton;
+  final Function? storyWithLocationButtonOnPressed;
+  final Color? storyWithLocationButtonColor;
 
   const MyAppBar({
     Key? key,
@@ -14,6 +17,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.logoutButtonOnPressed,
     this.needChangeLanguageButton,
     this.changeLanguageButtonOnPressed,
+    this.needStoryWithLocationButton,
+    this.storyWithLocationButtonOnPressed,
+    this.storyWithLocationButtonColor,
   }) : super(key: key);
 
   @override
@@ -28,6 +34,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: const TextStyle(color: Colors.white),
       ),
       actions: [
+        if (needStoryWithLocationButton == true)
+          IconButton(
+            onPressed: () => storyWithLocationButtonOnPressed!(),
+            icon: Icon(
+              Icons.location_on,
+              color: storyWithLocationButtonColor ?? Colors.white,
+            ),
+          ),
         if (needLogoutButton == true)
           IconButton(
             onPressed: () => logoutButtonOnPressed!(),

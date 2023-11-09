@@ -339,19 +339,24 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
               isLoggedIn = false;
               notifyListeners();
             },
-            onTapped: (String id, ErrorResponse response) async {
-              if (response.error == true) {
-                notificationTitle =
-                    AppLocalizations.of(navigatorKey.currentContext!)!
-                        .locationError;
-                notificationMessage = response.message;
-                selectedStoryId = id;
-                notifyListeners();
-                return;
-              } else if (response.error == false) {
-                selectedStoryId = id;
-                notifyListeners();
+            onTapped: (String id, response) async {
+              if (response != null) {
+                if (response.error == true) {
+                  notificationTitle =
+                      AppLocalizations.of(navigatorKey.currentContext!)!
+                          .locationError;
+                  notificationMessage = response.message;
+                  selectedStoryId = id;
+                  notifyListeners();
+                  return;
+                } else if (response.error == false) {
+                  selectedStoryId = id;
+                  notifyListeners();
+                }
               }
+
+              selectedStoryId = id;
+              notifyListeners();
             },
             onAddStoryButtonPressed: () async {
               addStory = true;

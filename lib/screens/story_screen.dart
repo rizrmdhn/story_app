@@ -28,6 +28,13 @@ class StoryScreen extends StatelessWidget {
             title: FlavorConfig.instance.values.titleApp,
             needLogoutButton: true,
             logoutButtonOnPressed: () => logoutButtonOnPressed(),
+            needStoryWithLocationButton: true,
+            storyWithLocationButtonOnPressed: () {
+              storyProvider
+                  .setStoryNeedLocation(!storyProvider.isStoryNeedLocation);
+            },
+            storyWithLocationButtonColor:
+                storyProvider.isStoryNeedLocation ? Colors.red : Colors.white,
           ),
           body: Flex(
             direction: Axis.vertical,

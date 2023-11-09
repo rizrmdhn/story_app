@@ -112,24 +112,27 @@ class _StoryListState extends State<StoryList> with TickerProviderStateMixin {
                   description: story.description,
                   photoUrl: story.photoUrl,
                   createdAt: story.createdAt,
-                  lat: story.lat,
-                  lon: story.lon,
+                  lat: story.lat ?? 0,
+                  lon: story.lon ?? 0,
                   onTapped: () async {
                     context.read<StoryProvider>().setIsFetching(true);
                     context.read<MapProvider>().clearMarkerAndPlacemark();
-                    var userLatLng = LatLng(
-                      story.lat,
-                      story.lon,
-                    );
                     context.read<StoryProvider>().getDetailStories(story.id);
-                    var response = await context
-                        .read<MapProvider>()
-                        .setUserLatLng(userLatLng);
-
-                    if (response.error == true) {
-                      widget.onTapped(story.id, response);
+                    if (story.lat != null && story.lon != null) {
+                      var userLatLng = LatLng(
+                        story.lat ?? 0,
+                        story.lon ?? 0,
+                      );
+                      var response = await context
+                          .read<MapProvider>()
+                          .setUserLatLng(userLatLng);
+                      if (response.error == true) {
+                        widget.onTapped(story.id, response);
+                      } else {
+                        widget.onTapped(story.id, response);
+                      }
                     } else {
-                      widget.onTapped(story.id, response);
+                      widget.onTapped(story.id, null);
                     }
                   },
                 ),

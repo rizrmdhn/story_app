@@ -18,6 +18,7 @@ class StoryProvider extends ChangeNotifier {
   String? _imagePath;
   bool _isLoggingIn = false;
   bool _isFetching = false;
+  bool storyNeedLocation = false;
 
   List<Story> get stories => _stories;
   DetailStory get detailStory => _detailStory;
@@ -25,6 +26,7 @@ class StoryProvider extends ChangeNotifier {
   String? get imagePath => _imagePath;
   bool get isLoggingIn => _isLoggingIn;
   bool get isFetching => _isFetching;
+  bool get isStoryNeedLocation => storyNeedLocation;
 
   StoryProvider() {
     initDetailStory();
@@ -43,6 +45,14 @@ class StoryProvider extends ChangeNotifier {
 
   void setIsLoggingIn(bool isLoggingIn) {
     _isLoggingIn = isLoggingIn;
+    notifyListeners();
+  }
+
+  void setStoryNeedLocation(bool value) {
+    _stories.clear();
+    pageItems = 1;
+    storyNeedLocation = value;
+    getAllStories();
     notifyListeners();
   }
 
@@ -78,8 +88,13 @@ class StoryProvider extends ChangeNotifier {
   Future<List<Story>> getAllStories() async {
     setIsFetching(true);
     final userToken = await _preferences.getUserToken();
-    final response =
-        await _apiService.getAllStories(userToken, pageItems!, sizeItems);
+    final response = await _apiService.getAllStories(
+      userToken,
+      pageItems!,
+      sizeItems,
+      storyNeedLocation ? 1 : 0,
+    );
+    notifyListeners();
 
     if (response.error == false) {
       if (response.listStory.length < sizeItems) {

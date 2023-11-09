@@ -168,22 +168,26 @@ class _DetailStoryScreenState extends State<DetailStoryScreen>
                               textAlign: TextAlign.justify,
                             ),
                           ),
-                          // location
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 20),
-                            child: Text(
-                              AppLocalizations.of(context)!.locationLabel,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                          if (value.detailStory.lat != null &&
+                              value.detailStory.lon != null)
+                            // location
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 20),
+                              child: Text(
+                                AppLocalizations.of(context)!.locationLabel,
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                          // google maps
-                          const SizedBox(
-                            height: 400,
-                            child: MyGoogleMaps(),
-                          ),
+                          if (value.detailStory.lat != null &&
+                              value.detailStory.lon != null)
+                            // google maps
+                            const SizedBox(
+                              height: 400,
+                              child: MyGoogleMaps(),
+                            ),
                         ],
                       ),
                     ),

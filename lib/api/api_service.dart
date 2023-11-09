@@ -132,8 +132,10 @@ class ApiService {
     String? userToken,
     int pageItems,
     int sizeItem,
+    int needLocation,
   ) async {
-    var url = '$baseUrl/stories?page=$pageItems&size=$sizeItem&location=1';
+    var url =
+        '$baseUrl/stories?page=$pageItems&size=$sizeItem&location=$needLocation';
     var headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $userToken'
