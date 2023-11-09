@@ -35,6 +35,9 @@ class StoryScreen extends StatelessWidget {
             },
             storyWithLocationButtonColor:
                 storyProvider.isStoryNeedLocation ? Colors.red : Colors.white,
+            storyWithLocationButtonIcon: storyProvider.isStoryNeedLocation
+                ? Icons.location_on
+                : Icons.location_off,
           ),
           body: Flex(
             direction: Axis.vertical,

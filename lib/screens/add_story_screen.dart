@@ -51,6 +51,15 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           : const Locale('en'),
                     ),
                   },
+                  needStoryWithLocationButton: true,
+                  storyWithLocationButtonOnPressed: () {
+                    storyProvider.setStoryNeedLocation(
+                        !storyProvider.isStoryNeedLocation);
+                  },
+                  storyWithLocationButtonColor:
+                      storyProvider.isStoryNeedLocation
+                          ? Colors.red
+                          : Colors.white,
                 ),
                 body: Center(
                   child: Padding(
@@ -111,23 +120,26 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                               ],
                             ),
                             const SizedBox(height: 20.0),
-                            // location
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 10),
-                              child: Text(
-                                AppLocalizations.of(context)!.locationLabel,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                            if (storyProvider.isStoryNeedLocation)
+                              // location
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  AppLocalizations.of(context)!.locationLabel,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                            // google maps
-                            const SizedBox(
-                              height: 400,
-                              child: MyGoogleMaps(),
-                            ),
-                            const SizedBox(height: 20.0),
+                            if (storyProvider.isStoryNeedLocation)
+                              // google maps
+                              const SizedBox(
+                                height: 400,
+                                child: MyGoogleMaps(),
+                              ),
+                            if (storyProvider.isStoryNeedLocation)
+                              const SizedBox(height: 20.0),
                             // the form
                             Form(
                               child: Column(
@@ -211,6 +223,15 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           : const Locale('en'),
                     ),
                   },
+                  needStoryWithLocationButton: true,
+                  storyWithLocationButtonOnPressed: () {
+                    storyProvider.setStoryNeedLocation(
+                        !storyProvider.isStoryNeedLocation);
+                  },
+                  storyWithLocationButtonColor:
+                      storyProvider.isStoryNeedLocation
+                          ? Colors.red
+                          : Colors.white,
                 ),
                 body: SingleChildScrollView(
                   child: Padding(
@@ -265,23 +286,26 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           ],
                         ),
                         const SizedBox(height: 20.0),
-                        // location
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            AppLocalizations.of(context)!.locationLabel,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                        if (storyProvider.isStoryNeedLocation)
+                          // location
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: Text(
+                              AppLocalizations.of(context)!.locationLabel,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                        // google maps
-                        const SizedBox(
-                          height: 400,
-                          child: MyGoogleMaps(),
-                        ),
-                        const SizedBox(height: 20.0),
+                        if (storyProvider.isStoryNeedLocation)
+                          // google maps
+                          const SizedBox(
+                            height: 400,
+                            child: MyGoogleMaps(),
+                          ),
+                        if (storyProvider.isStoryNeedLocation)
+                          const SizedBox(height: 20.0),
                         // the form
                         Form(
                           child: Column(

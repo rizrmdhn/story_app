@@ -3,7 +3,6 @@ import 'package:story_app/database/db.dart';
 import 'package:story_app/database/preferences.dart';
 import 'package:story_app/localization/main.dart';
 import 'package:story_app/model/page_configuration.dart';
-import 'package:story_app/model/response/error_response.dart';
 import 'package:story_app/provider/auth_provider.dart';
 import 'package:story_app/provider/connectivity_provider.dart';
 import 'package:story_app/provider/localization_provider.dart';
