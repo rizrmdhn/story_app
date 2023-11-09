@@ -146,6 +146,7 @@ class MapProvider extends ChangeNotifier {
         '${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
 
     _placemark = place;
+    _userLocation = latLng;
     notifyListeners();
 
     defineMarker(latLng, street, address);
