@@ -295,6 +295,11 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           MyDialog(
             title: notificationTitle!,
             message: notificationMessage!,
+            onOk: () {
+              notificationMessage = null;
+              notificationTitle = null;
+              notifyListeners();
+            },
           ),
         if (networkStatus != null && noConnection == true)
           MyDialog(
@@ -302,6 +307,11 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                 AppLocalizations.of(navigatorKey.currentContext!)!.networkError,
             message: AppLocalizations.of(navigatorKey.currentContext!)!
                 .networkErrorMessage,
+            onOk: () {
+              notificationMessage = null;
+              notificationTitle = null;
+              notifyListeners();
+            },
           ),
       ];
 
@@ -376,6 +386,7 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                   notificationMessage =
                       AppLocalizations.of(navigatorKey.currentContext!)!
                           .addStorySuccess;
+                  addStoryError = false;
                   notifyListeners();
                 }
               },
@@ -385,6 +396,14 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
           MyDialog(
             title: notificationTitle!,
             message: notificationMessage!,
+            onOk: () {
+              notificationMessage = null;
+              notificationTitle = null;
+              if (addStoryError != true) {
+                addStory = false;
+              }
+              notifyListeners();
+            },
           ),
         if (networkStatus != null && noConnection == true)
           MyDialog(
@@ -392,6 +411,11 @@ class MyRouteDelegate extends RouterDelegate<PageConfiguration>
                 AppLocalizations.of(navigatorKey.currentContext!)!.networkError,
             message: AppLocalizations.of(navigatorKey.currentContext!)!
                 .networkErrorMessage,
+            onOk: () {
+              notificationMessage = null;
+              notificationTitle = null;
+              notifyListeners();
+            },
           ),
       ];
 }

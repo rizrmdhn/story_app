@@ -6,10 +6,12 @@ import 'package:story_app/provider/story_provider.dart';
 class MyDialog extends Page {
   final String title;
   final String message;
+  final Function() onOk;
 
   MyDialog({
     required this.title,
     required this.message,
+    required this.onOk,
   }) : super(key: ValueKey(title));
 
   @override
@@ -29,7 +31,7 @@ class MyDialog extends Page {
                 onPressed: () {
                   context.read<AuthProvider>().setIsFetching(false);
                   context.read<StoryProvider>().setIsFetching(false);
-                  Navigator.of(context).pop();
+                  onOk();
                 },
                 child: const Text('OK'),
               ),
